@@ -1,8 +1,9 @@
-package com.mad.whoshomefordinner;
+package com.mad.whoshomefordinner.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,40 +13,56 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mad.whoshomefordinner.fragments.GroupFragment;
-import com.mad.whoshomefordinner.fragments.HomeFragment;
-import com.mad.whoshomefordinner.fragments.NotificationsFragment;
-import com.mad.whoshomefordinner.fragments.ScheduleFragment;
-import com.mad.whoshomefordinner.fragments.SettingsFragment;
+import com.google.firebase.auth.FirebaseUser;
+import com.mad.whoshomefordinner.Base.BaseActivity;
+import com.mad.whoshomefordinner.Home.HomePresenterImpl;
+import com.mad.whoshomefordinner.R;
+import com.mad.whoshomefordinner.Home.HomeView;
+import com.mad.whoshomefordinner.View.fragments.GroupFragment;
+import com.mad.whoshomefordinner.View.fragments.HomeFragment;
+import com.mad.whoshomefordinner.View.fragments.NotificationsFragment;
+import com.mad.whoshomefordinner.View.fragments.ScheduleFragment;
+import com.mad.whoshomefordinner.View.fragments.SettingsFragment;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import butterknife.ButterKnife;
+
+public class HomeActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, HomeView {
 
     private View mNavHeader;
 
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
+    private HomePresenterImpl mHomePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            // User is logged in
-        } else {
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        mHomePresenter = new HomePresenterImpl(mAuth, this);
+
+        mHomePresenter.attachView(this);
+        mHomePresenter.isSignedIn();
+        mHomePresenter.getCurrentUser();
+
+//        if (mAuth.getCurrentUser() != null) {
+//            // User is logged in
+//        } else {
+//            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//        }
+
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -140,5 +157,40 @@ public class HomeActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void setEnabled(boolean isEnabled) {
+
+    }
+
+    @Override
+    public void setUser(FirebaseUser user) {
+
+    }
+
+    @Override
+    public void isLogin(boolean isLogin) {
+        if (!isLogin) {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHomePresenter.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHomePresenter.detachView();
     }
 }
