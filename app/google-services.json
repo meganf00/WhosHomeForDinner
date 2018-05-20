@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "370060895786",
+    "firebase_url": "https://whos-home-for-dinner.firebaseio.com",
+    "project_id": "whos-home-for-dinner",
+    "storage_bucket": "whos-home-for-dinner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370060895786:android:712bc4946bb85287",
+        "android_client_info": {
+          "package_name": "com.mad.whoshomefordinner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "370060895786-rp74frboql69ufht8d9s5n8iuf291o18.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad.whoshomefordinner",
+            "certificate_hash": "74e8930da5d094a25552338065cea4e52512d533"
+          }
+        },
+        {
+          "client_id": "370060895786-kn0iakrj1k46cil0966v9u1joj5tmf9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwRyf43EyBB-0z2OlF6vzRSRW24m04Vq4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "370060895786-kn0iakrj1k46cil0966v9u1joj5tmf9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

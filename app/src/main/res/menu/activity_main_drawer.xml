@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/home_black_18dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_groups"
+            android:icon="@mipmap/group_black_18dp"
+            android:title="Groups" />
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@mipmap/schedule_18dp"
+            android:title="Schedule" />
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@mipmap/notifications_black_18dp"
+            android:title="Notifications" />
+    </group>
+
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@mipmap/settings_black_18dp"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@mipmap/sign_out_black_18dp"
+                android:title="Sign Out" />
+        </menu>
+    </item>
+
+</menu>
