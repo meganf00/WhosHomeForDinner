@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Activities;
+package com.mad.whoshomefordinner.Home;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -19,15 +19,14 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mad.whoshomefordinner.Login.LoginActivity;
 import com.mad.whoshomefordinner.Base.BaseActivity;
-import com.mad.whoshomefordinner.Home.HomePresenterImpl;
 import com.mad.whoshomefordinner.R;
-import com.mad.whoshomefordinner.Home.HomeView;
-import com.mad.whoshomefordinner.View.fragments.GroupFragment;
-import com.mad.whoshomefordinner.View.fragments.HomeFragment;
-import com.mad.whoshomefordinner.View.fragments.NotificationsFragment;
-import com.mad.whoshomefordinner.View.fragments.ScheduleFragment;
-import com.mad.whoshomefordinner.View.fragments.SettingsFragment;
+import com.mad.whoshomefordinner.fragments.GroupFragment;
+import com.mad.whoshomefordinner.fragments.Home.HomeFragment;
+import com.mad.whoshomefordinner.fragments.NotificationsFragment;
+import com.mad.whoshomefordinner.fragments.ScheduleFragment;
+import com.mad.whoshomefordinner.fragments.SettingsFragment;
 
 import butterknife.ButterKnife;
 
@@ -55,12 +54,6 @@ public class HomeActivity extends BaseActivity
         mHomePresenter.isSignedIn();
         mHomePresenter.getCurrentUser();
 
-//        if (mAuth.getCurrentUser() != null) {
-//            // User is logged in
-//        } else {
-//            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//        }
 
 
 
@@ -116,6 +109,8 @@ public class HomeActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_sign_out) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,7 +138,7 @@ public class HomeActivity extends BaseActivity
             fragment = new SettingsFragment();
 
         } else if (id == R.id.nav_sign_out) {
-
+            mAuth.signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

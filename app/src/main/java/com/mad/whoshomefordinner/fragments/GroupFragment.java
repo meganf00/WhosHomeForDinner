@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.View.fragments;
+package com.mad.whoshomefordinner.fragments;
 
 
 import android.os.Bundle;
@@ -12,25 +12,23 @@ import com.mad.whoshomefordinner.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ScheduleFragment extends Fragment {
+public class GroupFragment extends Fragment {
 
 
-    public ScheduleFragment() {
+    public GroupFragment() {
         // Required empty public constructor
     }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(getString(R.string.title_schedule));
+        getActivity().setTitle(getString(R.string.title_groups));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule, container, false);
+        return inflater.inflate(R.layout.fragment_group, container, false);
     }
 
 }

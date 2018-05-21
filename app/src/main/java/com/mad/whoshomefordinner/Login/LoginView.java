@@ -7,7 +7,7 @@ import com.mad.whoshomefordinner.Base.BaseView;
  */
 
 public interface LoginView extends BaseView {
-    void showValideationError(String message);
+    void showValidationError(String message);
     void loginSuccess();
     void loginError();
     void isLogin(boolean isLogin);

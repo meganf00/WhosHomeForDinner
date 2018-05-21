@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Activities;
+package com.mad.whoshomefordinner.Login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.mad.whoshomefordinner.Base.BaseActivity;
-import com.mad.whoshomefordinner.Login.LoginPresenter;
-import com.mad.whoshomefordinner.Login.LoginPresenterImpl;
+import com.mad.whoshomefordinner.Home.HomeActivity;
 import com.mad.whoshomefordinner.R;
-import com.mad.whoshomefordinner.Login.LoginView;
 
 import butterknife.OnClick;
 import butterknife.BindView;
@@ -52,54 +50,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         mLoginPresenter.attachView(this);
         mLoginPresenter.checkLogin();
 
-//        Button mEmailSignInButton = findViewById(R.id.email_sign_in_btn);
-//        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                        String emailTxt = mEmailView.getText().toString().trim();
-//        String passwordTxt = mPasswordView.getText().toString().trim();
-//        Log.d("TAG", "Sign in button clicked");
-//        mLoginPresenter.login(emailTxt, passwordTxt);
-//            }
-//        });
-
-
-//        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_btn);
-//        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String email = mEmailView.getText().toString();
-//                final String password = mPasswordView.getText().toString();
-
-
-//                mAuth.signInWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//
-//                                if (task.isSuccessful()) {
-//                                    // Sign in success, update UI with the signed-in user's information
-//                                    Log.d("TAG", "signInWithEmail:success");
-//                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//
-//                                } else {
-//                                    // If sign in fails, display a message to the user.
-//                                    Log.w("TAG", "signInWithEmail:failure", task.getException());
-//                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-//                                            Toast.LENGTH_SHORT).show();
-//
-//                                }
-//
-//
-//                            }
-//                        });
-//
-//
-//            }
-//        });
-
     }
 
     @OnClick(R.id.email_sign_in_btn) void loginBtnClick() {
@@ -124,7 +74,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @Override
-    public void showValideationError(String message) {
+    public void showValidationError(String message) {
 
     }
 
