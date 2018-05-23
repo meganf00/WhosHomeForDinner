@@ -1,6 +1,8 @@
 package com.mad.whoshomefordinner;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Created by Megan on 23/5/18.
@@ -50,6 +52,16 @@ public class User {
 
     public void setGroups(LinkedList<String> groups) {
         mGroups = groups;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", mId);
+        result.put("name", mName);
+        result.put("email", mEmail);
+        result.put("groups", mGroups);
+
+        return result;
     }
 
 }

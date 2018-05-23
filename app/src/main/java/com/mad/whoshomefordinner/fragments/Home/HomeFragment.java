@@ -4,6 +4,7 @@ package com.mad.whoshomefordinner.fragments.Home;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.mad.whoshomefordinner.Home.HomeActivity;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.User;
 
+import java.sql.DatabaseMetaData;
+
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,6 +40,7 @@ public class HomeFragment extends Fragment {
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
     private String mUserID;
+    private String mUserName;
 
 
     TextView mWelcomeText;
@@ -60,28 +64,36 @@ public class HomeFragment extends Fragment {
 
         getActivity().setTitle(getString(R.string.title_home));
         mWHFDRef = FirebaseDatabase.getInstance().getReference("whos-home-for-dinner");
-        mUserRef = mWHFDRef.child("User's");
+        mUserRef = mWHFDRef.child("User's").child("EwD3mg61IlQluPZr0yFZttHvt0Y2").child("Name");
+        //DatabaseReference ref = mUserRef.equalTo(mUserID);
         mAuth = FirebaseAuth.getInstance();
         mUserID = mAuth.getCurrentUser().getUid();
+        mUserName = mAuth.getCurrentUser().getDisplayName();
 
-//        userid = mAuth.getCurrentUser().getUid();
+        mUserRef.child("Name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot item: dataSnapshot.getChildren()) {
+                        if (item.getKey() == "EwD3mg61IlQluPZr0yFZttHvt0Y2") {
+                            User user = dataSnapshot.getValue(User.class);
+                        }
+                    }
+                }
+                else {
+                    Log.d("TAG", "null");
+                }
+            }
 
-//        mDBRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(getActivity(), "DB Failed", Toast.LENGTH_LONG).show();
-//            }
-//        });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "DB Failed", Toast.LENGTH_LONG).show();
+            }
+        });
 
         mWelcomeText = (TextView)view.findViewById(R.id.welcome_text);
 
-        mWelcomeText.setText(mUserID);
+        mWelcomeText.setText(getString(R.string.welcome_txt_hey) + mUserName + getString(R.string.welcome_txt_rundown));
 
         return view;
     }

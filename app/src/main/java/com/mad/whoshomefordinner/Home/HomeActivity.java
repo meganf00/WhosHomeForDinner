@@ -116,7 +116,7 @@ public class HomeActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -125,35 +125,38 @@ public class HomeActivity extends BaseActivity
         Class fragmentClass = null;
 
 
-        if (id == R.id.nav_home) {
-            fragment = new HomeFragment();
 
-        } else if (id == R.id.nav_groups) {
-            fragment = new GroupFragment();
 
-        } else if (id == R.id.nav_schedule) {
-            fragment = new ScheduleFragment();
+            if (id == R.id.nav_home) {
+                fragment = new HomeFragment();
 
-        } else if (id == R.id.nav_notifications) {
-            fragment = new NotificationsFragment();
+            } else if (id == R.id.nav_groups) {
+                fragment = new GroupFragment();
 
-        } else if (id == R.id.nav_settings) {
-            fragment = new SettingsFragment();
+            } else if (id == R.id.nav_schedule) {
+                fragment = new ScheduleFragment();
 
-        } else if (id == R.id.nav_sign_out) {
-            mAuth.signOut();
-            fragment = null;
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            } else if (id == R.id.nav_notifications) {
+                fragment = new NotificationsFragment();
 
-        }
+            } else if (id == R.id.nav_settings) {
+                fragment = new SettingsFragment();
 
-        if (fragment != null) {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            displaySelectedFragment(fragment);
-        }
+            } else if (id == R.id.nav_sign_out) {
+                mAuth.signOut();
+                fragment = null;
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+
+            if (fragment != null) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                displaySelectedFragment(fragment);
+            }
+
         return true;
     }
 
