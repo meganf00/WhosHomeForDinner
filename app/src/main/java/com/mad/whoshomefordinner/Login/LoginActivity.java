@@ -26,7 +26,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private FirebaseAuth mAuth;
     private LoginPresenter mLoginPresenter;
 
-    // UI references.
     @BindView(R.id.email)
      AutoCompleteTextView mEmailView;
 

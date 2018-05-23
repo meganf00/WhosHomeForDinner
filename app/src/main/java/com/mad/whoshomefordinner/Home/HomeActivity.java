@@ -121,10 +121,13 @@ public class HomeActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment fragment = null;
+        Fragment fragment = new HomeFragment();
+        Class fragmentClass = null;
+
 
         if (id == R.id.nav_home) {
             fragment = new HomeFragment();
+
         } else if (id == R.id.nav_groups) {
             fragment = new GroupFragment();
 
@@ -139,11 +142,18 @@ public class HomeActivity extends BaseActivity
 
         } else if (id == R.id.nav_sign_out) {
             mAuth.signOut();
+            fragment = null;
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        displaySelectedFragment(fragment);
+        if (fragment != null) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            displaySelectedFragment(fragment);
+        }
         return true;
     }
 
@@ -174,6 +184,7 @@ public class HomeActivity extends BaseActivity
         if (!isLogin) {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
