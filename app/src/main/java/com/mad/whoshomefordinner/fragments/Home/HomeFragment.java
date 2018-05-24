@@ -67,36 +67,40 @@ public class HomeFragment extends Fragment {
 
 
         getActivity().setTitle(getString(R.string.title_home));
-        mWHFDRef = FirebaseDatabase.getInstance().getReference("whos-home-for-dinner");
-        mUserRef = mWHFDRef.child("User's").child("EwD3mg61IlQluPZr0yFZttHvt0Y2").child("Name");
+
         //DatabaseReference ref = mUserRef.equalTo(mUserID);
 
-        if (mAuth != null) {
+
             mAuth = FirebaseAuth.getInstance();
-            mUserID = mAuth.getCurrentUser().getUid();
-            mUserName = mAuth.getCurrentUser().getDisplayName();
+        if (mAuth != null) {
+            mUserID = mAuth.getCurrentUser().getUid().toString();
+            mWHFDRef = FirebaseDatabase.getInstance().getReference();
+            mUserRef = mWHFDRef.child("User's").child(mUserID);
 
-        }
-        mUserRef.child("Name").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for (DataSnapshot item: dataSnapshot.getChildren()) {
-                        if ("EwD3mg61IlQluPZr0yFZttHvt0Y2".equals(item.getKey())) {
-                            User user = dataSnapshot.getValue(User.class);
+
+            mUserRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            if ("Name".equals(item.getKey())) {
+                                mUserName = item.getValue().toString();
+                            }
+
                         }
+                    } else {
+                        Log.d("TAG", "null");
                     }
-                }
-                else {
-                    Log.d("TAG", "null");
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "DB Failed", Toast.LENGTH_LONG).show();
-            }
-        });
+                    mWelcomeText.setText(getString(R.string.welcome_txt_hey) + mUserName + getString(R.string.welcome_txt_rundown));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getActivity(), "DB Failed", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         mWelcomeText = (TextView)view.findViewById(R.id.welcome_text);
 
