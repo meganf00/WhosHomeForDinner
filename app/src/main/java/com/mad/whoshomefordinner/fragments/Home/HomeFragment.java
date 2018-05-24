@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.Home.HomeActivity;
+import com.mad.whoshomefordinner.Home.HomePresenterImpl;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.User;
 
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,20 +64,25 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
+
+
         getActivity().setTitle(getString(R.string.title_home));
         mWHFDRef = FirebaseDatabase.getInstance().getReference("whos-home-for-dinner");
         mUserRef = mWHFDRef.child("User's").child("EwD3mg61IlQluPZr0yFZttHvt0Y2").child("Name");
         //DatabaseReference ref = mUserRef.equalTo(mUserID);
-        mAuth = FirebaseAuth.getInstance();
-        mUserID = mAuth.getCurrentUser().getUid();
-        mUserName = mAuth.getCurrentUser().getDisplayName();
 
+        if (mAuth != null) {
+            mAuth = FirebaseAuth.getInstance();
+            mUserID = mAuth.getCurrentUser().getUid();
+            mUserName = mAuth.getCurrentUser().getDisplayName();
+
+        }
         mUserRef.child("Name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot item: dataSnapshot.getChildren()) {
-                        if (item.getKey() == "EwD3mg61IlQluPZr0yFZttHvt0Y2") {
+                        if ("EwD3mg61IlQluPZr0yFZttHvt0Y2".equals(item.getKey())) {
                             User user = dataSnapshot.getValue(User.class);
                         }
                     }
