@@ -72,7 +72,8 @@ public class HomeFragment extends Fragment {
 
 
             mAuth = FirebaseAuth.getInstance();
-        if (mAuth != null) {
+
+        if (mAuth.getCurrentUser() != null) {
             mUserID = mAuth.getCurrentUser().getUid().toString();
             mWHFDRef = FirebaseDatabase.getInstance().getReference();
             mUserRef = mWHFDRef.child("User's").child(mUserID);
