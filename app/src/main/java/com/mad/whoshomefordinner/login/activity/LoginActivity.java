@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Login;
+package com.mad.whoshomefordinner.login.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mad.whoshomefordinner.Base.BaseActivity;
-import com.mad.whoshomefordinner.Home.HomeActivity;
+import com.mad.whoshomefordinner.base.BaseActivity;
+import com.mad.whoshomefordinner.login.presenter.LoginPresenter;
+import com.mad.whoshomefordinner.login.presenter.LoginPresenterImpl;
+import com.mad.whoshomefordinner.login.view.LoginView;
+import com.mad.whoshomefordinner.main.activity.MainActivity;
 import com.mad.whoshomefordinner.R;
 
 import butterknife.OnClick;
@@ -80,7 +83,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     public void loginSuccess() {
         Log.d("TAG", "signInWithEmail:success");
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

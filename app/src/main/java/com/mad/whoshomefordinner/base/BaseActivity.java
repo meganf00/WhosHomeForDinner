@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Base;
+package com.mad.whoshomefordinner.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

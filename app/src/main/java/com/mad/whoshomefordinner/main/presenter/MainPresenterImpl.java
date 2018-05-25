@@ -1,29 +1,30 @@
-package com.mad.whoshomefordinner.Home;
+package com.mad.whoshomefordinner.main.presenter;
 
 import android.app.Activity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.mad.whoshomefordinner.main.view.MainView;
 
 /**
  * Created by Megan on 20/5/18.
  */
 
-public class HomePresenterImpl implements HomePresenter{
+public class MainPresenterImpl implements MainPresenter {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private HomeView mHomeView;
+    private MainView mMainView;
     private Activity mContext;
 
-    public HomePresenterImpl(FirebaseAuth auth, final Activity context) {
+    public MainPresenterImpl(FirebaseAuth auth, final Activity context) {
         this.mAuth = auth;
         this.mContext = context;
     }
 
 
     @Override
-    public void attachView(HomeView view) {
-        mHomeView = view;
+    public void attachView(MainView view) {
+        mMainView = view;
     }
 
     @Override
@@ -34,16 +35,16 @@ public class HomePresenterImpl implements HomePresenter{
     @Override
     public void getCurrentUser() {
         if (mAuth.getCurrentUser() != null) {
-            mHomeView.setUser(mAuth.getCurrentUser());
+            mMainView.setUser(mAuth.getCurrentUser());
         }
     }
 
     @Override
     public void isSignedIn() {
         if (mAuth.getCurrentUser() != null) {
-            mHomeView.isLogin(true);
+            mMainView.isLogin(true);
         } else {
-            mHomeView.isLogin(false);
+            mMainView.isLogin(false);
         }
     }
 

@@ -1,6 +1,7 @@
-package com.mad.whoshomefordinner.Login;
+package com.mad.whoshomefordinner.login.presenter;
 
-import com.mad.whoshomefordinner.Base.BasePresenter;
+import com.mad.whoshomefordinner.base.BasePresenter;
+import com.mad.whoshomefordinner.login.view.LoginView;
 
 /**
  * Created by Megan on 20/5/18.

@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Base;
+package com.mad.whoshomefordinner.base;
 
 /**
  * Created by Megan on 20/5/18.

@@ -1,6 +1,6 @@
-package com.mad.whoshomefordinner.Login;
+package com.mad.whoshomefordinner.login.view;
 
-import com.mad.whoshomefordinner.Base.BaseView;
+import com.mad.whoshomefordinner.base.BaseView;
 
 /**
  * Created by Megan on 20/5/18.

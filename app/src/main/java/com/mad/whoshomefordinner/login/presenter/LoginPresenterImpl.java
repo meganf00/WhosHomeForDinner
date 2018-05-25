@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Login;
+package com.mad.whoshomefordinner.login.presenter;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mad.whoshomefordinner.login.view.LoginView;
 
 /**
  * Created by Megan on 20/5/18.

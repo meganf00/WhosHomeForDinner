@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.Home;
+package com.mad.whoshomefordinner.main.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -19,24 +19,26 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.mad.whoshomefordinner.Login.LoginActivity;
-import com.mad.whoshomefordinner.Base.BaseActivity;
+import com.mad.whoshomefordinner.login.activity.LoginActivity;
+import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.R;
-import com.mad.whoshomefordinner.fragments.GroupFragment;
-import com.mad.whoshomefordinner.fragments.Home.HomeFragment;
-import com.mad.whoshomefordinner.fragments.NotificationsFragment;
-import com.mad.whoshomefordinner.fragments.ScheduleFragment;
-import com.mad.whoshomefordinner.fragments.SettingsFragment;
+import com.mad.whoshomefordinner.fragments.group.GroupFragment;
+import com.mad.whoshomefordinner.fragments.home.HomeFragment;
+import com.mad.whoshomefordinner.fragments.notifications.NotificationsFragment;
+import com.mad.whoshomefordinner.fragments.schedule.ScheduleFragment;
+import com.mad.whoshomefordinner.fragments.settings.SettingsFragment;
+import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
+import com.mad.whoshomefordinner.main.view.MainView;
 
 import butterknife.ButterKnife;
 
-public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeView {
+public class MainActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
     private View mNavHeader;
 
     private FirebaseAuth mAuth;
-    private HomePresenterImpl mHomePresenter;
+    private MainPresenterImpl mHomePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class HomeActivity extends BaseActivity
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
-        mHomePresenter = new HomePresenterImpl(mAuth, this);
+        mHomePresenter = new MainPresenterImpl(mAuth, this);
 
         mHomePresenter.attachView(this);
         mHomePresenter.isSignedIn();
@@ -145,7 +147,7 @@ public class HomeActivity extends BaseActivity
             } else if (id == R.id.nav_sign_out) {
                 mAuth.signOut();
                 fragment = null;
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
 
@@ -185,7 +187,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public void isLogin(boolean isLogin) {
         if (!isLogin) {
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
