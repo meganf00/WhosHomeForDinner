@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.fragments.home;
+package com.mad.whoshomefordinner.fragments.home.view;
 
 
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.R;
+import com.mad.whoshomefordinner.base.BaseView;
+import com.mad.whoshomefordinner.fragments.home.model.HomeFragmentFirebaseInteractor;
 import com.mad.whoshomefordinner.main.activity.MainActivity;
 import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.Group;
@@ -32,18 +34,16 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements BaseView, HomeFragmentView {
 
     private DatabaseReference mWHFDRef;
     private DatabaseReference mUserRef;
-    private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
     private String mUserID;
     private String mUserName;
-    private String name;
-    private String email;
+
     private List<Group> groups = new ArrayList<>();
-    private User user;
+    private User mUser;
 
     List<String> groupTemp;
 
@@ -61,12 +61,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Bundle arguments = getArguments();
-        String userID = arguments.getString("userID");
-        String userName = arguments.getString("userMail");
-        String userEmail = arguments.getString("userMail");
-        String userGroups = arguments.getString("userGroups");
+//        String userID = arguments.getString("userID");
+//
+//        //TODO Not sure if I need these
+//        String userName = arguments.getString("userMail");
+//        String userEmail = arguments.getString("userMail");
+//        String userGroups = arguments.getString("userGroups");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -89,7 +90,7 @@ public class HomeFragment extends Fragment {
                         for (DataSnapshot item : dataSnapshot.getChildren()) {
                             if ("Name".equals(item.getKey())) {
                                 mUserName = item.getValue().toString();
-                                name = item.getValue().toString();
+
 
                             } else {
                                 Log.d("TAG", "null");
@@ -119,7 +120,7 @@ public class HomeFragment extends Fragment {
 
 
 //
-//        UserGroupSumAdapter recyclerAdapter = new UserGroupSumAdapter(getContext(), groups , user);
+//        UserGroupSumAdapter recyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser);
         RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),2);
         /// RecyclerView.LayoutManager recyce = new LinearLayoutManager(MainActivity.this);
         // recycle.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));

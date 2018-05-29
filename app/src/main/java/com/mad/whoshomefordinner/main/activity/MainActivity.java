@@ -19,14 +19,13 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.login.activity.LoginActivity;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.fragments.group.GroupFragment;
-import com.mad.whoshomefordinner.fragments.home.HomeFragment;
+import com.mad.whoshomefordinner.fragments.home.view.HomeFragment;
 import com.mad.whoshomefordinner.fragments.notifications.NotificationsFragment;
 import com.mad.whoshomefordinner.fragments.schedule.ScheduleFragment;
 import com.mad.whoshomefordinner.fragments.settings.SettingsFragment;
@@ -166,6 +165,7 @@ public class MainActivity extends BaseActivity
 
     private void displaySelectedFragment(Fragment fragment, User user) {
         Bundle bundle = new Bundle();
+        //bundle.putParcelable("User", mUser);
         bundle.putString("userID", mUser.getId().toString());
         bundle.putString("userName", mUser.getName().toString());
         bundle.putString("userMail", mUser.getEmail().toString());
