@@ -105,7 +105,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
 
         });
 
-        //createGroups(groupTemp);
+        //setUpGroups(groupTemp);
 
 
 

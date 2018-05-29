@@ -9,7 +9,10 @@ import com.mad.whoshomefordinner.fragments.home.view.HomeFragment;
 import com.mad.whoshomefordinner.fragments.home.view.HomeFragmentView;
 import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
 import com.mad.whoshomefordinner.main.view.MainView;
+import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
+
+import java.util.List;
 
 /**
  * Created by Megan on 29/5/18.
@@ -44,6 +47,11 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
         mHomeFragFBInteratorImpl.getPresenter(this);
     }
 
+    @Override
+    public void setUpUser() {
+        mHomeFragFBInteratorImpl.createUser();
+    }
+
 
     @Override
     public void attachView(HomeFragment view) {
@@ -58,6 +66,18 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     @Override
     public User getCurrentUser() {
         return mHomeFragFBInteratorImpl.getUser();
+    }
+
+    public void setUpGroups() {
+        mHomeFragFBInteratorImpl.createGroups();
+    }
+
+    public List<Group> getGroups() {
+        return mHomeFragFBInteratorImpl.getGroups();
+    }
+
+    public void groupsCreated() {
+        mHomeFragmentView.getGroups();
     }
 
     @Override

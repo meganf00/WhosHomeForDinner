@@ -9,4 +9,6 @@ public interface HomeFragmentView {
     void showProgressDialog();
     void hideProgressDialog();
     void setUpFragment();
+    void setUpGroups();
+    void getGroups();
 }

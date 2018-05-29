@@ -15,6 +15,7 @@ import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -38,6 +39,15 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     private List<Group> mGroups = new ArrayList<>();
     private User mUser;
 
+    private String mGroupID;
+    private String mGroupName;
+    private List<String> mGroupMembers = new ArrayList<>();
+    private List<String> mGroupWeekDays;
+    private String mGroupDay;
+    private String mGroupAllocatedCook;
+    private String mGroupMeal;
+    private String mGroupDeadline;
+
     private HomeFragmentPresenterImpl mHomeFragmentPresenter;
 
     public HomeFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
@@ -47,6 +57,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
         mUserID = mAuth.getCurrentUser().getUid();
         mWHFDRef = WHFDRef;
         mUserRef = mWHFDRef.child("User's").child(mUserID);
+        mGroupRef = mWHFDRef.child("Groups");
     }
 
     @Override
@@ -61,7 +72,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
     @Override
     public List<Group> getGroups() {
-        return null;
+        return mGroups;
     }
 
     @Override
@@ -101,6 +112,113 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
 
         });
+    }
+
+    public void createGroups(){
+
+        String weekDay = "";
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+
+        if (Calendar.MONDAY == dayOfWeek) weekDay = "Monday";
+        else if (Calendar.TUESDAY == dayOfWeek) weekDay = "Tuesday";
+        else if (Calendar.WEDNESDAY == dayOfWeek) weekDay = "Wednesday";
+        else if (Calendar.THURSDAY == dayOfWeek) weekDay = "Thursday";
+        else if (Calendar.FRIDAY == dayOfWeek) weekDay = "Friday";
+        else if (Calendar.SATURDAY == dayOfWeek) weekDay = "Saturday";
+        else if (Calendar.SUNDAY == dayOfWeek) weekDay = "Sunday";
+
+        mGroupDay = weekDay;
+
+        for (String groupID : mGroupIDs) {
+            mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            if (item.getKey().equals("Name")) {
+                                mGroupName = item.getValue().toString();
+                            } else if (item.getKey().equals("Current Week")) {
+                                Iterable<DataSnapshot> groupSnapShot = item.getChildren();
+                                for (DataSnapshot data : groupSnapShot) {
+                                    if (data.getKey().equals(mGroupDay)) {
+                                        Iterable<DataSnapshot> daySnapShot = data.getChildren();
+                                        for (DataSnapshot data2 : daySnapShot) {
+                                            if (data2.getKey().equals("Allocated Cook")) {
+                                                mGroupAllocatedCook = data2.getValue().toString();
+                                            } else if (data2.getKey().equals("Deadline")) {
+                                                mGroupDeadline = data2.getValue().toString();
+                                            } else if (data2.getKey().equals("Meal")) {
+                                                mGroupMeal = data2.getValue().toString();
+                                            } else if (data2.getKey().equals("Home")) {
+                                                Iterable<DataSnapshot> homeSnapShot = data2.getChildren();
+                                                for (DataSnapshot data3 : homeSnapShot) {
+                                                    if (data3.getValue().equals("True")) {
+                                                        String temp = data3.getKey().toString();
+                                                        mGroupMembers.add(temp);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                    Group group = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
+                    mGroups.add(group);
+
+                    mHomeFragmentPresenter.groupsCreated();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+
+
+            });
+
+//            mGroupRef.child(groupID).child("Current Week").child(weekDay).addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot != null) {
+//                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+//                            if (item.getKey().equals("Allocated Cook")) {
+//                                mGroupAllocatedCook = item.getValue().toString();
+//                            } else if (item.getKey().equals("Deadline")) {
+//                                mGroupDeadline = item.getValue().toString();
+//                            } else if (item.getKey().equals("Meal")) {
+//                                mGroupMeal = item.getValue().toString();
+//                            } else if (item.getKey().equals("Home")) {
+//                                Iterable<DataSnapshot> groupSnapShot = item.getChildren();
+//                                for (DataSnapshot data : groupSnapShot) {
+//                                    String temp = data.getKey().toString();
+//                                    if (data.getValue().toString().equals("True")) {
+//                                        mGroupMembers.add(temp);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+
+
+
+
+        }
+
+
+
     }
 
     @Override

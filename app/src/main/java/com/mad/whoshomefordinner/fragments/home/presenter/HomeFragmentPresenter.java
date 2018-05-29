@@ -17,4 +17,5 @@ public interface HomeFragmentPresenter extends BasePresenter<HomeFragment> {
     void setUpInteractor();
     HomeFragmentPresenterImpl getPresenter();
     void connectWithInteractor();
+    void setUpUser();
 }

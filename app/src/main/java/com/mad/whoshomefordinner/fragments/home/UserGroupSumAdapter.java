@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.model.User;
@@ -23,6 +28,7 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     private Context mContext;
     private List<Group> mGroupList;
     private User mUser;
+    private String tempNameCook = "";
 
 
     public UserGroupSumAdapter(Context context, List<Group> groups, User user) {
@@ -66,15 +72,33 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Group groups = mGroupList.get(position);
         holder.groupName.setText(groups.getName());
-        if (mUser.getId() == groups.getAllocatedCook().getId()) {
+        if (mUser.getId() == groups.getAllocatedCook()) {
             //current user is cooking tonight
             holder.cookingStatus.setText("You are cooking tonight");
             holder.whoCooking.setText("You are making ");
-            holder.deadline.setText("Your deadline is  " + groups.getDeadline());
+            holder.deadline.setText("Your deadline is" + " " + groups.getDeadline());
         } else {
             //current user is not cooking
-            holder.cookingStatus.setText(groups.getAllocatedCook().getName() + "You are not cooking tonight");
-            holder.whoCooking.setText(groups.getAllocatedCook().getName().toString() + "is making ");
+            holder.cookingStatus.setText("You are not cooking tonight");
+            DatabaseReference cookRef = FirebaseDatabase.getInstance().getReference().child("User's").child(groups.getAllocatedCook().toString());
+            cookRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot item : dataSnapshot.getChildren()) {
+                            if (item.getKey().equals("Name")) {
+                                tempNameCook = item.getValue().toString();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            holder.whoCooking.setText(tempNameCook + " " + "is making ");
             holder.deadline.setText("Let them know by " + groups.getDeadline());
         }
         holder.meal.setText(groups.getMeal());

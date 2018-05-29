@@ -9,32 +9,30 @@ import java.util.List;
 
 public class Group {
 
-    private int mId;
+    private String mId;
     private String mName;
-    private List<User> mGroupMembers = new ArrayList<>();
-    private List<String> mWeekDays = new ArrayList<>();
+    private List<String> mGroupMembers = new ArrayList<>();
     private String mDay;
-    private User mAllocatedCook;
+    private String mAllocatedCook;
     private String mMeal;
     private String mDeadline;
 
-    public Group(int id, String name, List<User> groupMembers, List<String> weekDays, String day,
-                 User allocatedCook, String meal, String deadline) {
+    public Group(String id, String name, List<String> groupMembers, String day,
+                 String allocatedCook, String meal, String deadline) {
         mId = id;
         mName = name;
         mGroupMembers = groupMembers;
-        mWeekDays = weekDays;
         mDay = day;
         mAllocatedCook = allocatedCook;
         mMeal = meal;
         mDeadline = deadline;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         mId = id;
     }
 
@@ -46,20 +44,12 @@ public class Group {
         mName = name;
     }
 
-    public List<User> getGroupMembers() {
+    public List<String> getGroupMembers() {
         return mGroupMembers;
     }
 
-    public void setGroupMembers(List<User> groupMembers) {
+    public void setGroupMembers(List<String> groupMembers) {
         mGroupMembers = groupMembers;
-    }
-
-    public List<String> getWeekDays() {
-        return mWeekDays;
-    }
-
-    public void setWeekDays(List<String> weekDays) {
-        mWeekDays = weekDays;
     }
 
     public String getDay() {
@@ -70,11 +60,11 @@ public class Group {
         mDay = day;
     }
 
-    public User getAllocatedCook() {
+    public String getAllocatedCook() {
         return mAllocatedCook;
     }
 
-    public void setAllocatedCook(User allocatedCook) {
+    public void setAllocatedCook(String allocatedCook) {
         mAllocatedCook = allocatedCook;
     }
 
