@@ -8,7 +8,9 @@ import com.mad.whoshomefordinner.base.BaseView;
  */
 
 public interface MainView extends BaseView{
-    void setEnabled(boolean isEnabled);
-    void setUser(FirebaseUser user);
-    void isLogin(boolean isLogin);
+    void goToLoginScreen();
+    void setUpUser();
+    void showProgressDialog();
+    void hideProgressDialog();
+    void setUpFragment();
 }

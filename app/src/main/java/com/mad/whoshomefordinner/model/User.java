@@ -1,7 +1,9 @@
-package com.mad.whoshomefordinner;
+package com.mad.whoshomefordinner.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,12 +11,12 @@ import java.util.Map;
  */
 
 public class User {
-    private int mId;
+    private String mId;
     private String mName;
     private String mEmail;
-    private LinkedList<String> mGroups;
+    private List<String> mGroups = new ArrayList<>();;
 
-    public User(int id, String name, String email, LinkedList<String> groups) {
+    public User(String id, String name, String email, List<String> groups) {
 
         mId = id;
         mName = name;
@@ -22,11 +24,11 @@ public class User {
         mGroups = groups;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         mId = id;
     }
 
@@ -46,7 +48,7 @@ public class User {
         mEmail = email;
     }
 
-    public LinkedList<String> getGroups() {
+    public List<String> getGroups() {
         return mGroups;
     }
 

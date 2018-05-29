@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner;
+package com.mad.whoshomefordinner.model;
 
 import java.util.LinkedList;
 

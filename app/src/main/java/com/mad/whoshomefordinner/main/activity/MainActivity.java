@@ -16,9 +16,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.login.activity.LoginActivity;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.R;
@@ -29,7 +32,9 @@ import com.mad.whoshomefordinner.fragments.schedule.ScheduleFragment;
 import com.mad.whoshomefordinner.fragments.settings.SettingsFragment;
 import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
 import com.mad.whoshomefordinner.main.view.MainView;
+import com.mad.whoshomefordinner.model.User;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity
@@ -39,6 +44,12 @@ public class MainActivity extends BaseActivity
 
     private FirebaseAuth mAuth;
     private MainPresenterImpl mHomePresenter;
+    private DatabaseReference mWHFDRef;
+
+    private User mUser;
+
+    @BindView(R.id.home_progress_bar)
+    ProgressBar userShowProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +61,15 @@ public class MainActivity extends BaseActivity
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
-        mHomePresenter = new MainPresenterImpl(mAuth, this);
+        mWHFDRef = FirebaseDatabase.getInstance().getReference();
+        mHomePresenter = new MainPresenterImpl(mAuth, this, mWHFDRef);
 
         mHomePresenter.attachView(this);
-        mHomePresenter.isSignedIn();
-        mHomePresenter.getCurrentUser();
 
+        mHomePresenter.setUpInteractor();
+        mHomePresenter.connectWithInteractor();
 
-
+        mHomePresenter.checkIfSignedIn();
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,8 +92,6 @@ public class MainActivity extends BaseActivity
         mNavHeader = navigationView.getHeaderView(0);
 
         navigationView.setCheckedItem(R.id.nav_home);
-        Fragment fragment = new HomeFragment();
-        displaySelectedFragment(fragment);
     }
 
     @Override
@@ -124,45 +134,43 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = new HomeFragment();
-        Class fragmentClass = null;
 
+        if (id == R.id.nav_home) {
+            fragment = new HomeFragment();
 
+        } else if (id == R.id.nav_groups) {
+            fragment = new GroupFragment();
 
+        } else if (id == R.id.nav_schedule) {
+            fragment = new ScheduleFragment();
 
-            if (id == R.id.nav_home) {
-                fragment = new HomeFragment();
+        } else if (id == R.id.nav_notifications) {
+            fragment = new NotificationsFragment();
 
-            } else if (id == R.id.nav_groups) {
-                fragment = new GroupFragment();
+        } else if (id == R.id.nav_settings) {
+            fragment = new SettingsFragment();
 
-            } else if (id == R.id.nav_schedule) {
-                fragment = new ScheduleFragment();
+        } else if (id == R.id.nav_sign_out) {
+            mHomePresenter.signOut();
+            fragment = null;
+        }
 
-            } else if (id == R.id.nav_notifications) {
-                fragment = new NotificationsFragment();
-
-            } else if (id == R.id.nav_settings) {
-                fragment = new SettingsFragment();
-
-            } else if (id == R.id.nav_sign_out) {
-                mAuth.signOut();
-                fragment = null;
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-
-            }
-
-            if (fragment != null) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                displaySelectedFragment(fragment);
-            }
+        if (fragment != null) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            displaySelectedFragment(fragment, mUser);
+        }
 
         return true;
     }
 
-    private void displaySelectedFragment(Fragment fragment) {
+    private void displaySelectedFragment(Fragment fragment, User user) {
+        Bundle bundle = new Bundle();
+        bundle.putString("userID", mUser.getId().toString());
+        bundle.putString("userName", mUser.getName().toString());
+        bundle.putString("userMail", mUser.getEmail().toString());
+        bundle.putString("userGroups", mUser.getGroups().toString());
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame, fragment);
@@ -175,23 +183,38 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void setEnabled(boolean isEnabled) {
+    public void goToLoginScreen() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
     @Override
-    public void setUser(FirebaseUser user) {
-
+    public void setUpUser() {
+        mUser = mHomePresenter.getCurrentUser();
     }
 
     @Override
-    public void isLogin(boolean isLogin) {
-        if (!isLogin) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+    public void showProgressDialog() {
+        userShowProgressBar.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void hideProgressDialog() {
+        userShowProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setUpFragment() {
+        setUpUser();
+
+        Fragment fragment = new HomeFragment();
+        displaySelectedFragment(fragment, mUser);
+        hideProgressDialog();
+
+    }
+
 
     @Override
     protected void onStop() {
@@ -204,4 +227,6 @@ public class MainActivity extends BaseActivity
         super.onDestroy();
         mHomePresenter.detachView();
     }
+
+
 }
