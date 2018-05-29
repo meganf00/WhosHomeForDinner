@@ -28,14 +28,17 @@ public class MainPresenterImpl implements MainPresenter {
 
     }
 
+    @Override
     public void setUpInteractor(){
         mFirebaseInteractor = new FirebaseInteractorImpl(mAuth, mContext, mWHFDRef);
     }
 
+    @Override
     public MainPresenterImpl getPresenter() {
         return this;
     }
 
+    @Override
     public void connectWithInteractor(){
         mFirebaseInteractor.getPresenter(this);
     }

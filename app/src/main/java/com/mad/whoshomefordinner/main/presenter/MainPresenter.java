@@ -16,4 +16,7 @@ public interface MainPresenter extends BasePresenter<MainView> {
     void onStop();
     void userCreatedYay();
     void userCreated();
+    void setUpInteractor();
+    MainPresenterImpl getPresenter();
+    void connectWithInteractor();
 }

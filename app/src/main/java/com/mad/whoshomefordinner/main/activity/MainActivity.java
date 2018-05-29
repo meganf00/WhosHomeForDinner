@@ -6,8 +6,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mad.whoshomefordinner.login.activity.LoginActivity;
+import com.mad.whoshomefordinner.login.view.LoginActivity;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.fragments.group.GroupFragment;
@@ -50,6 +49,12 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.home_progress_bar)
     ProgressBar userShowProgressBar;
 
+    //@BindView(R.id.userNameHeader)
+    TextView mUserNameHeader;
+
+    //@BindView(R.id.emailHeaderTxt)
+    TextView mEmailHeaderTxt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+
 
         mAuth = FirebaseAuth.getInstance();
         mWHFDRef = FirebaseDatabase.getInstance().getReference();
@@ -71,15 +78,6 @@ public class MainActivity extends BaseActivity
         mHomePresenter.checkIfSignedIn();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -91,6 +89,11 @@ public class MainActivity extends BaseActivity
         mNavHeader = navigationView.getHeaderView(0);
 
         navigationView.setCheckedItem(R.id.nav_home);
+
+
+
+        mUserNameHeader = mNavHeader.findViewById(R.id.userNameHeader);
+        mEmailHeaderTxt = mNavHeader.findViewById(R.id.emailHeaderTxt);
     }
 
     @Override
@@ -211,6 +214,10 @@ public class MainActivity extends BaseActivity
 
         Fragment fragment = new HomeFragment();
         displaySelectedFragment(fragment, mUser);
+
+        mUserNameHeader.setText(mUser.getName());
+        mEmailHeaderTxt.setText(mUser.getEmail());
+
         hideProgressDialog();
 
     }

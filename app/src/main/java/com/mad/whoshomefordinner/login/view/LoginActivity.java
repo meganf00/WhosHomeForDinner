@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.login.activity;
+package com.mad.whoshomefordinner.login.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +8,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.login.presenter.LoginPresenter;
 import com.mad.whoshomefordinner.login.presenter.LoginPresenterImpl;
-import com.mad.whoshomefordinner.login.view.LoginView;
 import com.mad.whoshomefordinner.main.activity.MainActivity;
 import com.mad.whoshomefordinner.R;
 
@@ -36,6 +38,15 @@ public class LoginActivity extends BaseActivity implements LoginView {
      EditText mPasswordView;
 
 
+    @BindView(R.id.login_progress)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.email_sign_in_btn)
+    Button mSignInButton;
+
+    @BindView(R.id.email_login_form)
+    LinearLayout mLoginForm;
+
     private View mProgressView;
     private View mLoginFormView;
 
@@ -55,9 +66,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @OnClick(R.id.email_sign_in_btn) void loginBtnClick() {
+        attemptLogin();
+        showProgressBar();
         String emailTxt = mEmailView.getText().toString().trim();
         String passwordTxt = mPasswordView.getText().toString().trim();
         Log.d("TAG", "Sign in button clicked");
+
         mLoginPresenter.login(emailTxt, passwordTxt);
     }
 
@@ -98,6 +112,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     public void isLogin(boolean isLogin) {
 
+    }
+
+    public void showProgressBar(){
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLoginForm.setVisibility(View.GONE);
+        mSignInButton.setVisibility(View.GONE);
+        mEmailView.setVisibility(View.GONE);
+        mPasswordView.setVisibility(View.GONE);
     }
 
     @Override

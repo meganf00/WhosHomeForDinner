@@ -55,26 +55,19 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
         if (mAuth.getCurrentUser() != null) {
             mUserID = mAuth.getCurrentUser().getUid();
             mWHFDRef2 = WHFDRef;
-            mUserRef2 = getInstance().getReference().child("User's").child(mUserID);
-
+            mUserRef2 = mWHFDRef2.child("User's").child(mUserID);
 
         }
 
-
-
     }
 
+    @Override
     public void getPresenter(MainPresenterImpl mainPresenter){
         mMainPresenter = mainPresenter.getPresenter();
     }
 
     @Override
     public void createUser() {
-//        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-//        DatabaseReference DB = FirebaseDatabase.getInstance().getReference().child("User's").child(userID);
-
-
-        //DatabaseReference currentUserRef = mUserRef2.child(mUserID);
 
         mUserRef2.addValueEventListener(new ValueEventListener() {
             @Override
@@ -90,57 +83,13 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
                             for (DataSnapshot data : groupSnapShot) {
                                 String temp = data.getKey().toString();
                                 groupTemp.add(temp);
-//                                DatabaseReference ref = mWHFDRef2.child("Groups").child(temp);
-//                                ref.addValueEventListener(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshotInner) {
-//                                        if (dataSnapshotInner != null) {
-//                                            String name;
-//
-//                                            for (DataSnapshot item : dataSnapshotInner.getChildren()) {
-//                                                if ("Name".equals(item.getKey())) {
-//                                                    name = item.getValue().toString();
-//                                                }
-//
-//                                            }
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                    }
-//                                });
                             }
-
-
-//                            for (String ref : groupTemp) {
-//                                DatabaseReference tempRef = mUserRef2.child("Groups").child(ref);
-//                                tempRef.addValueEventListener(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                                        if (dataSnapshot != null) {
-//                                            for (DataSnapshot item : dataSnapshot.getChildren()) {
-//                                                groupTemp.add(item.getKey().toString());
-//                                            }
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                    }
-//                                });
-                            }
-
-
                         }
                     }
+                }
                  else {
                     Log.d("TAG", "null");
                 }
-
-
 
                 mUser = new User(mUserID, name, email, groupTemp);
                 userCreated();

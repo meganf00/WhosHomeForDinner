@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.base.BaseView;
 import com.mad.whoshomefordinner.fragments.home.model.HomeFragmentFirebaseInteractor;
+import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterImpl;
 import com.mad.whoshomefordinner.main.activity.MainActivity;
 import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.Group;
@@ -39,6 +40,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     private DatabaseReference mWHFDRef;
     private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
+    private HomeFragmentPresenterImpl mHomeFragmentPresenter;
+
     private String mUserID;
     private String mUserName;
 
@@ -62,12 +65,12 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
-//        String userID = arguments.getString("userID");
-//
-//        //TODO Not sure if I need these
-//        String userName = arguments.getString("userMail");
-//        String userEmail = arguments.getString("userMail");
-//        String userGroups = arguments.getString("userGroups");
+        String userID = arguments.getString("userID");
+
+        //TODO Not sure if I need these
+        String userName = arguments.getString("userMail");
+        String userEmail = arguments.getString("userMail");
+        String userGroups = arguments.getString("userGroups");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -76,6 +79,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         getActivity().setTitle(getString(R.string.title_home));
 
         mAuth = FirebaseAuth.getInstance();
+
+        mHomeFragmentPresenter = new HomeFragmentPresenterImpl(mAuth, mWHFDRef);
 
         if (mAuth.getCurrentUser() != null) {
             mUserID = mAuth.getCurrentUser().getUid().toString();
@@ -129,6 +134,30 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         //recycle.setAdapter(recyclerAdapter);
 
         return view;
+    }
+
+    @Override
+    public void setUpUser() {
+        mUser = mHomeFragmentPresenter.getCurrentUser();
+    }
+
+    @Override
+    public void showProgressDialog() {
+
+    }
+
+    @Override
+    public void hideProgressDialog() {
+
+    }
+
+    @Override
+    public void setUpFragment() {
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
     }
 
 }

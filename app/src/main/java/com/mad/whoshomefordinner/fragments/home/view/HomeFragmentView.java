@@ -5,4 +5,8 @@ package com.mad.whoshomefordinner.fragments.home.view;
  */
 
 public interface HomeFragmentView {
+    void setUpUser();
+    void showProgressDialog();
+    void hideProgressDialog();
+    void setUpFragment();
 }
