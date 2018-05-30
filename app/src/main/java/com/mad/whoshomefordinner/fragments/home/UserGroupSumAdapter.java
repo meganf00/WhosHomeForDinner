@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -38,8 +39,9 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView groupName, cookingStatus, whoCooking, meal, deadline, homeQuestionNumber;
-        public RadioGroup areYouHome;
+        public TextView groupName, cookingStatus, whoCooking, meal, deadline, homeQuestionOrNumber,
+        noPeopleHome, homeStaus;
+        public LinearLayout recycleGroup;
         public ViewHolder(View itemView) {
             super(itemView);
             groupName =  itemView.findViewById(R.id.group_name);
@@ -47,10 +49,11 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             whoCooking = itemView.findViewById(R.id.who_cooking);
             meal = itemView.findViewById(R.id.meal);
             deadline = itemView.findViewById(R.id.deadline_txt);
-            homeQuestionNumber = itemView.findViewById(R.id.home_question);
-            areYouHome = itemView.findViewById(R.id.are_you_home);
-
-            areYouHome.setOnClickListener(new View.OnClickListener() {
+            homeQuestionOrNumber = itemView.findViewById(R.id.home_question);
+            noPeopleHome = itemView.findViewById(R.id.no_people_home);
+            homeStaus = itemView.findViewById(R.id.home_status);
+            recycleGroup = itemView.findViewById(R.id.home_body);
+            recycleGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -77,9 +80,28 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             holder.cookingStatus.setText("You are cooking tonight");
             holder.whoCooking.setText("You are making ");
             holder.deadline.setText("Your deadline is" + " " + groups.getDeadline());
+            holder.noPeopleHome.setText(groups.getGroupMembers().size());
+            holder.homeQuestionOrNumber.setText("Number of people RSVD'd: ");
         } else {
             //current user is not cooking
+            holder.noPeopleHome.setVisibility(View.GONE);
+            holder.homeQuestionOrNumber.setText("Are you home? ");
             holder.cookingStatus.setText("You are not cooking tonight");
+
+            boolean home = false;
+            List<String> tempMembers = groups.getGroupMembers();
+
+            for (String string : tempMembers) {
+                if (string == mUser.getId()) {
+                    home = true;
+                }
+            }
+
+            if (home) {
+                holder.homeStaus.setText("Yes");
+            } else {
+                holder.homeStaus.setText("No");
+            }
             DatabaseReference cookRef = FirebaseDatabase.getInstance().getReference().child("User's").child(groups.getAllocatedCook().toString());
             cookRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -91,6 +113,7 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
                             }
                         }
                     }
+
                 }
 
                 @Override

@@ -59,6 +59,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     ProgressBar mProgressBar;
 
+    UserGroupSumAdapter mRecyclerAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,16 +152,18 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
         mWelcomeText.setText(getString(R.string.welcome_txt_hey) + mUserName + getString(R.string.welcome_txt_rundown));
 
-        UserGroupSumAdapter recyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser);
-        RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),2);
+        mRecyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser);
+        RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),1);
         recycle.setLayoutManager(recyce);
         recycle.setItemAnimator( new DefaultItemAnimator());
-        recycle.setAdapter(recyclerAdapter);
+        recycle.setAdapter(mRecyclerAdapter);
 
         hideProgressDialog();
 
+
     }
 
-
-
+    public void dataUpdated() {
+        mRecyclerAdapter.notifyDataSetChanged();
+    }
 }

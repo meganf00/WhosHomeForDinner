@@ -127,7 +127,7 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
         mTitleTxt.setText("Your Groups");
 
         GroupViewAdapter recyleAdapter = new GroupViewAdapter(getContext(), mGroups);
-        RecyclerView.LayoutManager recyle = new GridLayoutManager(this.getActivity(), 2);
+        RecyclerView.LayoutManager recyle = new GridLayoutManager(this.getActivity(), 1);
         mRecyclerView.setLayoutManager(recyle);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(recyleAdapter);
