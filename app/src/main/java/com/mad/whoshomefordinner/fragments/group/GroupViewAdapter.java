@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.fragments.group.presenter;
+package com.mad.whoshomefordinner.fragments.group;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

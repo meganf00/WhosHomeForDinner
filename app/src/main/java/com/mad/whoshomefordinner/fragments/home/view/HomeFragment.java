@@ -76,12 +76,6 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         Bundle arguments = getArguments();
         String userID = arguments.getString("userID");
 
-        //TODO Not sure if I need these
-        String userName = arguments.getString("userMail");
-        String userEmail = arguments.getString("userMail");
-        String userGroups = arguments.getString("userGroups");
-
-
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
