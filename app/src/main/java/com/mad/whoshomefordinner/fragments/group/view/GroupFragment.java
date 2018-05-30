@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.fragments.group;
+package com.mad.whoshomefordinner.fragments.group.view;
 
 
 import android.os.Bundle;

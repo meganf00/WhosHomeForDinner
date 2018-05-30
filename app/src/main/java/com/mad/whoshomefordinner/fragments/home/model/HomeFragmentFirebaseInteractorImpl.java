@@ -17,6 +17,8 @@ import com.mad.whoshomefordinner.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Megan on 29/5/18.
@@ -48,7 +50,13 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     private String mGroupMeal;
     private String mGroupDeadline;
 
+    public Group group;
+
     private HomeFragmentPresenterImpl mHomeFragmentPresenter;
+
+    private final ReentrantLock lock = new ReentrantLock();
+
+    private int count = 0;
 
     public HomeFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
         mAuth = auth;
@@ -116,6 +124,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
     public void createGroups(){
 
+
         String weekDay = "";
         Calendar c = Calendar.getInstance();
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
@@ -130,92 +139,73 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
         mGroupDay = weekDay;
 
-        for (String groupID : mGroupIDs) {
-            mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot != null) {
-                        for (DataSnapshot item : dataSnapshot.getChildren()) {
-                            if (item.getKey().equals("Name")) {
-                                mGroupName = item.getValue().toString();
-                            } else if (item.getKey().equals("Current Week")) {
-                                Iterable<DataSnapshot> groupSnapShot = item.getChildren();
-                                for (DataSnapshot data : groupSnapShot) {
-                                    if (data.getKey().equals(mGroupDay)) {
-                                        Iterable<DataSnapshot> daySnapShot = data.getChildren();
-                                        for (DataSnapshot data2 : daySnapShot) {
-                                            if (data2.getKey().equals("Allocated Cook")) {
-                                                mGroupAllocatedCook = data2.getValue().toString();
-                                            } else if (data2.getKey().equals("Deadline")) {
-                                                mGroupDeadline = data2.getValue().toString();
-                                            } else if (data2.getKey().equals("Meal")) {
-                                                mGroupMeal = data2.getValue().toString();
-                                            } else if (data2.getKey().equals("Home")) {
-                                                Iterable<DataSnapshot> homeSnapShot = data2.getChildren();
-                                                for (DataSnapshot data3 : homeSnapShot) {
-                                                    if (data3.getValue().equals("True")) {
-                                                        String temp = data3.getKey().toString();
-                                                        mGroupMembers.add(temp);
+
+            for (String groupID : mGroupIDs) {
+                mGroupID = groupID;
+                mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot != null) {
+                            for (DataSnapshot item : dataSnapshot.getChildren()) {
+                                if (item.getKey().equals("Name")) {
+                                    mGroupName = item.getValue().toString();
+                                } else if (item.getKey().equals("Current Week")) {
+                                    Iterable<DataSnapshot> groupSnapShot = item.getChildren();
+                                    for (DataSnapshot data : groupSnapShot) {
+                                        if (data.getKey().equals(mGroupDay)) {
+                                            Iterable<DataSnapshot> daySnapShot = data.getChildren();
+                                            for (DataSnapshot data2 : daySnapShot) {
+                                                if (data2.getKey().equals("Allocated cook")) {
+                                                    mGroupAllocatedCook = data2.getValue().toString();
+                                                } else if (data2.getKey().equals("Deadline")) {
+                                                    mGroupDeadline = data2.getValue().toString();
+                                                } else if (data2.getKey().equals("Meal")) {
+                                                    mGroupMeal = data2.getValue().toString();
+                                                } else if (data2.getKey().equals("Home")) {
+                                                    Iterable<DataSnapshot> homeSnapShot = data2.getChildren();
+                                                    for (DataSnapshot data3 : homeSnapShot) {
+                                                        if (data3.getValue().equals("True")) {
+                                                            String temp = data3.getKey().toString();
+                                                            mGroupMembers.add(temp);
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
 
+                            }
+                            group = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
+                        }
+
+                        mGroups.add(group);
+
+                        count += 1;
+
+
+                        if (mGroupIDs.size() == count) {
+
+                            mHomeFragmentPresenter.groupsCreated();
                         }
 
                     }
-                    Group group = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
-                    mGroups.add(group);
-
-                    mHomeFragmentPresenter.groupsCreated();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
 
 
 
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-//            mGroupRef.child(groupID).child("Current Week").child(weekDay).addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot != null) {
-//                        for (DataSnapshot item : dataSnapshot.getChildren()) {
-//                            if (item.getKey().equals("Allocated Cook")) {
-//                                mGroupAllocatedCook = item.getValue().toString();
-//                            } else if (item.getKey().equals("Deadline")) {
-//                                mGroupDeadline = item.getValue().toString();
-//                            } else if (item.getKey().equals("Meal")) {
-//                                mGroupMeal = item.getValue().toString();
-//                            } else if (item.getKey().equals("Home")) {
-//                                Iterable<DataSnapshot> groupSnapShot = item.getChildren();
-//                                for (DataSnapshot data : groupSnapShot) {
-//                                    String temp = data.getKey().toString();
-//                                    if (data.getValue().toString().equals("True")) {
-//                                        mGroupMembers.add(temp);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
+                    }
+
+
+                });
+
+            }
 
 
 
 
-        }
 
 
 

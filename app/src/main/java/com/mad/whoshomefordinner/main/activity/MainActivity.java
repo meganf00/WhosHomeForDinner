@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.login.view.LoginActivity;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.R;
-import com.mad.whoshomefordinner.fragments.group.GroupFragment;
+import com.mad.whoshomefordinner.fragments.group.view.GroupFragment;
 import com.mad.whoshomefordinner.fragments.home.view.HomeFragment;
 import com.mad.whoshomefordinner.fragments.notifications.NotificationsFragment;
 import com.mad.whoshomefordinner.fragments.schedule.ScheduleFragment;
