@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -30,17 +29,19 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     private List<Group> mGroupList;
     private User mUser;
     private String tempNameCook = "";
+    private List<String> mAllocatedCookName;
 
 
-    public UserGroupSumAdapter(Context context, List<Group> groups, User user) {
+    public UserGroupSumAdapter(Context context, List<Group> groups, User user, List<String> allocatedCookName) {
         mGroupList = groups;
         mContext = context;
         mUser = user;
+        mAllocatedCookName = allocatedCookName;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView groupName, cookingStatus, whoCooking, meal, deadline, homeQuestionOrNumber,
-        noPeopleHome, homeStaus;
+        noPeopleHome, homeStatus;
         public LinearLayout recycleGroup;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,14 +52,8 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             deadline = itemView.findViewById(R.id.deadline_txt);
             homeQuestionOrNumber = itemView.findViewById(R.id.home_question);
             noPeopleHome = itemView.findViewById(R.id.no_people_home);
-            homeStaus = itemView.findViewById(R.id.home_status);
+            homeStatus = itemView.findViewById(R.id.home_status);
             recycleGroup = itemView.findViewById(R.id.home_body);
-            recycleGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
         }
     }
 
@@ -72,15 +67,16 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Group groups = mGroupList.get(position);
+        String allocatedCook = mAllocatedCookName.get(position);
         holder.groupName.setText(groups.getName());
-        if (mUser.getId() == groups.getAllocatedCook()) {
+        if (mUser.getId().equals(groups.getAllocatedCook())) {
             //current user is cooking tonight
             holder.cookingStatus.setText("You are cooking tonight");
             holder.whoCooking.setText("You are making ");
             holder.deadline.setText("Your deadline is" + " " + groups.getDeadline());
-            holder.noPeopleHome.setText(groups.getGroupMembers().size());
+            holder.noPeopleHome.setText(Integer.toString(groups.getGroupMembers().size()));
             holder.homeQuestionOrNumber.setText("Number of people RSVD'd: ");
         } else {
             //current user is not cooking
@@ -98,30 +94,11 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             }
 
             if (home) {
-                holder.homeStaus.setText("Yes");
+                holder.homeStatus.setText("Yes");
             } else {
-                holder.homeStaus.setText("No");
+                holder.homeStatus.setText("No");
             }
-            DatabaseReference cookRef = FirebaseDatabase.getInstance().getReference().child("User's").child(groups.getAllocatedCook().toString());
-            cookRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot != null) {
-                        for (DataSnapshot item : dataSnapshot.getChildren()) {
-                            if (item.getKey().equals("Name")) {
-                                tempNameCook = item.getValue().toString();
-                            }
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            holder.whoCooking.setText(tempNameCook + " " + "is making ");
+            holder.whoCooking.setText(allocatedCook + " " + "is making ");
             holder.deadline.setText("Let them know by " + groups.getDeadline());
         }
         holder.meal.setText(groups.getMeal());

@@ -5,6 +5,8 @@ import com.mad.whoshomefordinner.fragments.home.view.HomeFragment;
 import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
 import com.mad.whoshomefordinner.model.User;
 
+import java.util.List;
+
 /**
  * Created by Megan on 29/5/18.
  */
@@ -18,4 +20,6 @@ public interface HomeFragmentPresenter extends BasePresenter<HomeFragment> {
     HomeFragmentPresenterImpl getPresenter();
     void connectWithInteractor();
     void setUpUser();
+
+    List<String> getAllocatedCooksNames();
 }

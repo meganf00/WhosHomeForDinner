@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     private List<Group> groups = new ArrayList<>();
     private User mUser;
 
-    List<String> groupTemp;
+    List<String> mAllocatedCooks;
 
     RecyclerView recycle;
 
@@ -63,6 +64,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     UserGroupSumAdapter mRecyclerAdapter;
 
     ProgressBar mHomeProgressBar;
+
+    private LinearLayout mHomeGroupsView;
 
     private int mPosition;
 
@@ -149,18 +152,32 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         groups = mHomeFragmentPresenter.getGroups();
 
         if (groups != null) {
+            getAllocatedCooks();
+        }
+
+        if (mAllocatedCooks != null) {
             initiateView();
         }
     }
 
+    @Override
+    public void updateRow() {
+
+    }
+
+    public void getAllocatedCooks() {
+        mAllocatedCooks = mHomeFragmentPresenter.getAllocatedCooksNames();
+    }
+
+    @Override
     public void initiateView() {
 
         mUserName = mUser.getName();
 
         mWelcomeText.setText(getString(R.string.welcome_txt_hey) + mUserName + getString(R.string.welcome_txt_rundown));
 
-        mRecyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser);
-        RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),1);
+        mRecyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser, mAllocatedCooks);
+        final RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),1);
         recycle.setLayoutManager(recyce);
         recycle.setItemAnimator( new DefaultItemAnimator());
         recycle.setAdapter(mRecyclerAdapter);
@@ -170,10 +187,13 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         recycle.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recycle, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                mHomeFragmentPresenter.handleRowClick();
                 mPosition = position;
                 Group group = groups.get(position);
                 mHomeProgressBar = view.findViewById(R.id.home_status_progress);
+                mHomeGroupsView = view.findViewById(R.id.home_body);
                 mHomeProgressBar.setVisibility(View.VISIBLE);
+                mHomeGroupsView.setVisibility(View.GONE);
             }
 
             @Override
@@ -183,6 +203,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         }));
 
     }
+
 
     public void updateHomeStatus(View view, int position) {
 

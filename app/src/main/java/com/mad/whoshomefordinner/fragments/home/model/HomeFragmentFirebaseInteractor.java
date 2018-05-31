@@ -17,4 +17,6 @@ public interface HomeFragmentFirebaseInteractor {
     List<Group> getGroups();
     void createUser();
     boolean userCreated();
+
+    List<String> getAllocatedCooks();
 }

@@ -50,11 +50,11 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     private String mGroupMeal;
     private String mGroupDeadline;
 
+    private List<String> mAllocatedCooksList = new ArrayList<>();
+
     public Group group;
 
     private HomeFragmentPresenterImpl mHomeFragmentPresenter;
-
-    private final ReentrantLock lock = new ReentrantLock();
 
     private int count = 0;
 
@@ -149,6 +149,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
                             for (DataSnapshot item : dataSnapshot.getChildren()) {
                                 if (item.getKey().equals("Name")) {
                                     mGroupName = item.getValue().toString();
+                                    break;
                                 } else if (item.getKey().equals("Current Week")) {
                                     Iterable<DataSnapshot> groupSnapShot = item.getChildren();
                                     for (DataSnapshot data : groupSnapShot) {
@@ -157,6 +158,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
                                             for (DataSnapshot data2 : daySnapShot) {
                                                 if (data2.getKey().equals("Allocated cook")) {
                                                     mGroupAllocatedCook = data2.getValue().toString();
+                                                    mAllocatedCooksList.add(data2.getValue().toString());
                                                 } else if (data2.getKey().equals("Deadline")) {
                                                     mGroupDeadline = data2.getValue().toString();
                                                 } else if (data2.getKey().equals("Meal")) {
@@ -195,24 +197,25 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        //TODO Add handling stuff here!!
                     }
-
-
                 });
-
             }
-
-
-
-
-
-
-
     }
+
+
 
     @Override
     public boolean userCreated() {
         return true;
+    }
+
+    public void generateCookNames() {
+        
+    }
+
+    @Override
+    public List<String> getAllocatedCooks() {
+        return mAllocatedCooksList;
     }
 }

@@ -11,4 +11,7 @@ public interface HomeFragmentView {
     void setUpFragment();
     void setUpGroups();
     void getGroups();
+
+    void updateRow();
+    void initiateView();
 }
