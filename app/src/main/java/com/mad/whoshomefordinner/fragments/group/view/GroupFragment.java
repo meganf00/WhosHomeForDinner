@@ -1,6 +1,8 @@
 package com.mad.whoshomefordinner.fragments.group.view;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.ContactsContract;
@@ -19,8 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.fragments.group.GroupViewAdapter;
 import com.mad.whoshomefordinner.fragments.group.presenter.GroupFragmentPresenterImpl;
+import com.mad.whoshomefordinner.groupView.GroupViewActivity;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
+import com.mad.whoshomefordinner.utils.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,8 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
     TextView mTitleTxt;
 
     ProgressBar mProgressBar;
+
+    int mPosition;
 
 
     @Override
@@ -133,5 +139,25 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
         mRecyclerView.setAdapter(recyleAdapter);
 
         hideProgressDialog();
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                mPosition = position;
+                Group group = mGroups.get(position);
+
+
+                Intent intent = new Intent(getContext(), GroupViewActivity.class);
+                intent.putExtra("groupID", group.getId());
+                startActivity(intent);
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 }

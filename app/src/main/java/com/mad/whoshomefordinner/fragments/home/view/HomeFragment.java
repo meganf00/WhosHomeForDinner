@@ -30,6 +30,7 @@ import com.mad.whoshomefordinner.main.activity.MainActivity;
 import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
+import com.mad.whoshomefordinner.utils.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,10 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     ProgressBar mProgressBar;
 
     UserGroupSumAdapter mRecyclerAdapter;
+
+    ProgressBar mHomeProgressBar;
+
+    private int mPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         mHomeFragmentPresenter.attachView(this);
         mHomeFragmentPresenter.setUpInteractor();
         mHomeFragmentPresenter.connectWithInteractor();
+
+        // mHomeProgressBar.findViewById(R.id.home_status_progress);
 
         mHomeFragmentPresenter.setUpUser();
 
@@ -159,6 +166,25 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         recycle.setAdapter(mRecyclerAdapter);
 
         hideProgressDialog();
+
+        recycle.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recycle, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                mPosition = position;
+                Group group = groups.get(position);
+                mHomeProgressBar = view.findViewById(R.id.home_status_progress);
+                mHomeProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+    }
+
+    public void updateHomeStatus(View view, int position) {
 
 
     }
