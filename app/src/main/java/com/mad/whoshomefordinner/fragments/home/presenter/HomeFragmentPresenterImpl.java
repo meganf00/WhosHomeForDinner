@@ -52,6 +52,18 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
         mHomeFragFBInteratorImpl.createUser();
     }
 
+
+
+    @Override
+    public void allocatedCooksGenerated(){
+        mHomeFragmentView.getAllocatedCooks();
+    }
+
+    @Override
+    public void setUpAllocatedCooks() {
+        mHomeFragFBInteratorImpl.generateCookNames();
+    }
+
     @Override
     public List<String> getAllocatedCooksNames() {
         return mHomeFragFBInteratorImpl.getAllocatedCooks();
@@ -100,9 +112,12 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
         mHomeFragmentView.setUpFragment();
     }
 
-    public void handleRowClick() {
-        // do firebase stuff..
-        // on callback do..
+    public void handleRowClick(int position) {
+        mHomeFragFBInteratorImpl.updateHomeStatus(position);
+    }
+
+    @Override
+    public void rowClickFinished(){
         mHomeFragmentView.updateRow();
     }
 }

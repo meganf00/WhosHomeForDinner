@@ -22,4 +22,8 @@ public interface HomeFragmentPresenter extends BasePresenter<HomeFragment> {
     void setUpUser();
 
     List<String> getAllocatedCooksNames();
+    void allocatedCooksGenerated();
+
+    void setUpAllocatedCooks();
+    void rowClickFinished();
 }

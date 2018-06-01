@@ -5,30 +5,21 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.base.BaseView;
 import com.mad.whoshomefordinner.fragments.home.UserGroupSumAdapter;
-import com.mad.whoshomefordinner.fragments.home.model.HomeFragmentFirebaseInteractor;
 import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterImpl;
-import com.mad.whoshomefordinner.main.activity.MainActivity;
-import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 import com.mad.whoshomefordinner.utils.RecyclerTouchListener;
@@ -67,7 +58,10 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     private LinearLayout mHomeGroupsView;
 
+    private TextView mHomeStatusTxt;
+
     private int mPosition;
+    private View mView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,23 +145,28 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     public void getGroups(){
         groups = mHomeFragmentPresenter.getGroups();
 
-        if (groups != null) {
-            getAllocatedCooks();
-        }
+        generateAllocatedCooks();
+    }
 
-        if (mAllocatedCooks != null) {
-            initiateView();
-        }
+    private void generateAllocatedCooks() {
+        mHomeFragmentPresenter.setUpAllocatedCooks();
     }
 
     @Override
     public void updateRow() {
+        mHomeStatusTxt = mView.findViewById(R.id.home_status);
 
+
+        mHomeProgressBar.setVisibility(View.GONE);
+        mHomeGroupsView.setVisibility(View.VISIBLE);
     }
 
+    @Override
     public void getAllocatedCooks() {
         mAllocatedCooks = mHomeFragmentPresenter.getAllocatedCooksNames();
+        initiateView();
     }
+
 
     @Override
     public void initiateView() {
@@ -187,13 +186,13 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         recycle.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recycle, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                mHomeFragmentPresenter.handleRowClick();
+                mView = view;
                 mPosition = position;
-                Group group = groups.get(position);
                 mHomeProgressBar = view.findViewById(R.id.home_status_progress);
                 mHomeGroupsView = view.findViewById(R.id.home_body);
                 mHomeProgressBar.setVisibility(View.VISIBLE);
                 mHomeGroupsView.setVisibility(View.GONE);
+                updateHomeStatus(view, position);
             }
 
             @Override
@@ -206,7 +205,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
 
     public void updateHomeStatus(View view, int position) {
-
+        mHomeFragmentPresenter.handleRowClick(position);
 
     }
 

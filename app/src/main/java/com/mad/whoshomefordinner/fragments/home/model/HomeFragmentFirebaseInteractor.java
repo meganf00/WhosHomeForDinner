@@ -19,4 +19,8 @@ public interface HomeFragmentFirebaseInteractor {
     boolean userCreated();
 
     List<String> getAllocatedCooks();
+    void generateCookNames();
+
+    void updateHomeStatus(int position);
+
 }

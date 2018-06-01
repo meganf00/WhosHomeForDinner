@@ -17,6 +17,7 @@ import com.mad.whoshomefordinner.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -57,6 +58,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     private HomeFragmentPresenterImpl mHomeFragmentPresenter;
 
     private int count = 0;
+    private int groupCount = 0;
 
     public HomeFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
         mAuth = auth;
@@ -124,24 +126,13 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
     public void createGroups(){
 
-
         String weekDay = "";
         Calendar c = Calendar.getInstance();
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-
-        if (Calendar.MONDAY == dayOfWeek) weekDay = "Monday";
-        else if (Calendar.TUESDAY == dayOfWeek) weekDay = "Tuesday";
-        else if (Calendar.WEDNESDAY == dayOfWeek) weekDay = "Wednesday";
-        else if (Calendar.THURSDAY == dayOfWeek) weekDay = "Thursday";
-        else if (Calendar.FRIDAY == dayOfWeek) weekDay = "Friday";
-        else if (Calendar.SATURDAY == dayOfWeek) weekDay = "Saturday";
-        else if (Calendar.SUNDAY == dayOfWeek) weekDay = "Sunday";
-
-        mGroupDay = weekDay;
+        mGroupDay = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
 
 
-            for (String groupID : mGroupIDs) {
-                mGroupID = groupID;
+            for (final String groupID : mGroupIDs) {
+                //mGroupID = groupID;
                 mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -158,7 +149,6 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
                                             for (DataSnapshot data2 : daySnapShot) {
                                                 if (data2.getKey().equals("Allocated cook")) {
                                                     mGroupAllocatedCook = data2.getValue().toString();
-                                                    mAllocatedCooksList.add(data2.getValue().toString());
                                                 } else if (data2.getKey().equals("Deadline")) {
                                                     mGroupDeadline = data2.getValue().toString();
                                                 } else if (data2.getKey().equals("Meal")) {
@@ -178,22 +168,20 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
                                 }
 
                             }
-                            group = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
+                            group = new Group(groupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
                         }
 
                         mGroups.add(group);
 
-                        count += 1;
+                        groupCount += 1;
 
 
-                        if (mGroupIDs.size() == count) {
+                        if (groupCount >= mGroupIDs.size()) {
 
                             mHomeFragmentPresenter.groupsCreated();
                         }
 
                     }
-
-
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -210,8 +198,66 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
         return true;
     }
 
+    @Override
     public void generateCookNames() {
-        
+        count = 0;
+        for (Group group : mGroups) {
+            DatabaseReference nameRef = mWHFDRef.child("User's").child(group.getAllocatedCook());
+            nameRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot item : dataSnapshot.getChildren()){
+                            if ("Name".equals(item.getKey())){
+                                mAllocatedCooksList.add(item.getValue().toString());
+                                break;
+                            }
+                        }
+                        count += 1;
+                    }
+
+                    if (count == mGroupIDs.size()) {
+                        mHomeFragmentPresenter.allocatedCooksGenerated();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void updateHomeStatus(int position) {
+        String groupID = mGroups.get(position).getId();
+        DatabaseReference groupRef = mWHFDRef.child("Groups").child(groupID).child("Current Week")
+                .child(mGroupDay).child("Home");
+        groupRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()){
+                        if (mUserID.equals(item.getKey().toString())) {
+                            if ("True".equals(item.getValue().toString())) {
+                                item.getRef().setValue("False");
+                                break;
+                            } else if ("False".equals(item.getValue().toString())) {
+                                item.getRef().setValue("True");
+                                break;
+                            }
+                        }
+                    }
+                }
+                mHomeFragmentPresenter.rowClickFinished();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

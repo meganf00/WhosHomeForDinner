@@ -103,6 +103,13 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
         }
         holder.meal.setText(groups.getMeal());
 
+        holder.recycleGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
     }
 
