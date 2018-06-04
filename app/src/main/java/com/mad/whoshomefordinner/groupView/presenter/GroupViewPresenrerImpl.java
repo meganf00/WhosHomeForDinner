@@ -91,7 +91,7 @@ public class GroupViewPresenrerImpl implements GroupViewPresenter{
 
     @Override
     public void userCreated() {
-        mGroupViewView.initiateView();
+        mGroupViewView.setUpUser();
     }
 
 

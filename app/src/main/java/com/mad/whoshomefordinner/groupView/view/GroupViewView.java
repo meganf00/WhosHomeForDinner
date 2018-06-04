@@ -11,6 +11,7 @@ public interface GroupViewView extends BaseView {
     void setUpUser();
     void showProgressDialog();
     void hideProgressDialog();
-    Group getGroup();
+    void getGroup();
     void initiateView();
+    void setUpGroups();
 }

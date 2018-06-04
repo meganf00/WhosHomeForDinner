@@ -4,11 +4,9 @@ import android.app.Activity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.mad.whoshomefordinner.fragments.home.model.HomeFragmentFirebaseInteractorImpl;
+import com.mad.whoshomefordinner.fragments.home.model.firebase.HomeFragmentFirebaseInteractorImpl;
 import com.mad.whoshomefordinner.fragments.home.view.HomeFragment;
 import com.mad.whoshomefordinner.fragments.home.view.HomeFragmentView;
-import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
-import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
@@ -120,4 +118,16 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     public void rowClickFinished(){
         mHomeFragmentView.updateRow();
     }
+
+    @Override
+    public void pastDeadline() {
+        mHomeFragmentView.showPastDeadlineToast();
+    }
+
+    @Override
+    public void userIsAllocatedCook() {
+        mHomeFragmentView.createAllocatedCookToast();
+    }
+
+
 }

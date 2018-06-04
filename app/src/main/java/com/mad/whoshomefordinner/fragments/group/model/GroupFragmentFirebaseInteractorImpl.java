@@ -19,6 +19,7 @@ import com.mad.whoshomefordinner.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -56,6 +57,7 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
     private GroupFragmentPresenterImpl mGroupFragmentPresenter;
 
     private int count = 0;
+    private int groupCount = 0;
 
     public GroupFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
         mAuth = auth;
@@ -123,24 +125,16 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
 
     public void createGroups(){
 
+        groupCount = 0;
 
         String weekDay = "";
         Calendar c = Calendar.getInstance();
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-
-        if (Calendar.MONDAY == dayOfWeek) weekDay = "Monday";
-        else if (Calendar.TUESDAY == dayOfWeek) weekDay = "Tuesday";
-        else if (Calendar.WEDNESDAY == dayOfWeek) weekDay = "Wednesday";
-        else if (Calendar.THURSDAY == dayOfWeek) weekDay = "Thursday";
-        else if (Calendar.FRIDAY == dayOfWeek) weekDay = "Friday";
-        else if (Calendar.SATURDAY == dayOfWeek) weekDay = "Saturday";
-        else if (Calendar.SUNDAY == dayOfWeek) weekDay = "Sunday";
+        mGroupDay = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
 
         mGroupDay = weekDay;
 
 
-        for (String groupID : mGroupIDs) {
-            mGroupID = groupID;
+        for (final String groupID : mGroupIDs) {
             mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,15 +169,15 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
                             }
 
                         }
-                        group = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
+                        group = new Group(groupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
                     }
 
                     mGroups.add(group);
 
-                    count += 1;
+                    groupCount += 1;
 
 
-                    if (mGroupIDs.size() == count) {
+                    if (mGroupIDs.size() == groupCount) {
 
                         mGroupFragmentPresenter.groupsCreated();
                     }

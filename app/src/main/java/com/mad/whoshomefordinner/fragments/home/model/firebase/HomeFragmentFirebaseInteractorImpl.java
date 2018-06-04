@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.fragments.home.model;
+package com.mad.whoshomefordinner.fragments.home.model.firebase;
 
 import android.app.Activity;
 import android.util.Log;
@@ -14,12 +14,16 @@ import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterI
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Megan on 29/5/18.
@@ -133,7 +137,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
             for (final String groupID : mGroupIDs) {
                 //mGroupID = groupID;
-                mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
+                mGroupRef.child(groupID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot != null) {
@@ -203,7 +207,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
         count = 0;
         for (Group group : mGroups) {
             DatabaseReference nameRef = mWHFDRef.child("User's").child(group.getAllocatedCook());
-            nameRef.addValueEventListener(new ValueEventListener() {
+            nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null) {
@@ -231,33 +235,125 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
 
     @Override
     public void updateHomeStatus(int position) {
-        String groupID = mGroups.get(position).getId();
-        DatabaseReference groupRef = mWHFDRef.child("Groups").child(groupID).child("Current Week")
-                .child(mGroupDay).child("Home");
-        groupRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    for (DataSnapshot item : dataSnapshot.getChildren()){
-                        if (mUserID.equals(item.getKey().toString())) {
-                            if ("True".equals(item.getValue().toString())) {
-                                item.getRef().setValue("False");
-                                break;
-                            } else if ("False".equals(item.getValue().toString())) {
-                                item.getRef().setValue("True");
-                                break;
+
+        if (!userIsAllocatedCook(position)) {
+
+            try {
+                if (nowIsBeforeDeadline(position)) {
+
+
+                    String groupID = mGroups.get(position).getId();
+                    DatabaseReference groupRef = mWHFDRef.child("Groups").child(groupID).child("Current Week")
+                            .child(mGroupDay).child("Home");
+                    groupRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot != null) {
+                                for (DataSnapshot item : dataSnapshot.getChildren()) {
+                                    if (mUserID.equals(item.getKey().toString())) {
+                                        if ("True".equals(item.getValue().toString())) {
+                                            item.getRef().setValue("False");
+                                            break;
+                                        } else if ("False".equals(item.getValue().toString())) {
+                                            item.getRef().setValue("True");
+                                            break;
+                                        }
+                                    }
+                                }
                             }
+                            mHomeFragmentPresenter.rowClickFinished();
                         }
-                    }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+                    mHomeFragmentPresenter.pastDeadline();
                 }
-                mHomeFragmentPresenter.rowClickFinished();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+        } else {
+            mHomeFragmentPresenter.userIsAllocatedCook();
+        }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public boolean nowIsBeforeDeadline(int position) throws ParseException {
 
+        Date currentTimeCalendar = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
+
+        String currentTime = format.format(currentTimeCalendar);
+
+        String deadlineTime = mGroups.get(position).getDeadline();
+
+
+        String currentHourStr = currentTime.substring(0, 2);
+        String currentMinStr = currentTime.substring(3, 5);
+
+        String deadlineHourStr = deadlineTime.substring(0, 2);
+        String deadLineMinStr = deadlineTime.substring(3, 5);
+
+        int currentHour = Integer.parseInt(currentHourStr);
+        int currentMin = Integer.parseInt(currentMinStr);
+        int deadlineHour = Integer.parseInt(deadlineHourStr);
+        int deadlineMin = Integer.parseInt(deadLineMinStr);
+
+
+        if (deadlineMin == 0 || currentMin == 0 ) {
+            if (currentHour < deadlineHour) {
+                return true;
+            } else {
+                return false;
             }
-        });
+        } else {
+            if (currentHour < deadlineHour && currentMin < deadlineMin) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+
+
+        //Date current24Time = null;
+        //Date deadlineTime = null;
+
+
+            //current24Time = format.parse(currentTime);
+
+
+
+            //deadlineTime = format.format(mGroups.get(position).getDeadline());
+
+            //deadlineTime = format.parse(currentTime);
+
+            //String string = "";
+
+
+//        if (deadlineTime.after(deadlineTime)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+
+
+
+
+    }
+
+    @Override
+    public boolean userIsAllocatedCook(int position) {
+        if (mUser.getId().equals(mGroups.get(position).getAllocatedCook())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

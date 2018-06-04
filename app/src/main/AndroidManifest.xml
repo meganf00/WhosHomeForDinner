@@ -31,8 +31,12 @@
             android:name=".login.view.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".groupView.GroupViewActivity"
+            android:name=".groupView.view.GroupViewActivity"
             android:label="@string/title_activity_group_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".viewgroupmembers.ViewGroupMembersActivity"
+            android:label="@string/title_activity_view_group_members"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

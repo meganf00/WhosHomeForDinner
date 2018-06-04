@@ -1,11 +1,9 @@
 package com.mad.whoshomefordinner.fragments.group.view;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.fragments.group.GroupViewAdapter;
 import com.mad.whoshomefordinner.fragments.group.presenter.GroupFragmentPresenterImpl;
-import com.mad.whoshomefordinner.groupView.GroupViewActivity;
+import com.mad.whoshomefordinner.groupView.view.GroupViewActivity;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 import com.mad.whoshomefordinner.utils.RecyclerTouchListener;

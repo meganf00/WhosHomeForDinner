@@ -17,6 +17,7 @@ import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,6 +79,7 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             holder.deadline.setText("Your deadline is" + " " + groups.getDeadline());
             holder.noPeopleHome.setText(Integer.toString(groups.getGroupMembers().size()));
             holder.homeQuestionOrNumber.setText("Number of people RSVD'd: ");
+            holder.homeStatus.setText("");
         } else {
             //current user is not cooking
             holder.noPeopleHome.setVisibility(View.GONE);
@@ -87,8 +89,11 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             boolean home = false;
             List<String> tempMembers = groups.getGroupMembers();
 
-            for (String string : tempMembers) {
-                if (string == mUser.getId()) {
+            List<String> groupMembers = new ArrayList<>();
+            groupMembers = groups.getGroupMembers();
+
+            for (String member : groupMembers) {
+                if (member.equals(mUser.getId())) {
                     home = true;
                 }
             }
@@ -112,6 +117,8 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
 
 
     }
+
+
 
     @Override
     public int getItemCount() {

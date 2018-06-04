@@ -17,6 +17,7 @@ import com.mad.whoshomefordinner.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Megan on 31/5/18.
@@ -125,17 +126,8 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
 
         String weekDay = "";
         Calendar c = Calendar.getInstance();
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        mGroupDay = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
 
-        if (Calendar.MONDAY == dayOfWeek) weekDay = "Monday";
-        else if (Calendar.TUESDAY == dayOfWeek) weekDay = "Tuesday";
-        else if (Calendar.WEDNESDAY == dayOfWeek) weekDay = "Wednesday";
-        else if (Calendar.THURSDAY == dayOfWeek) weekDay = "Thursday";
-        else if (Calendar.FRIDAY == dayOfWeek) weekDay = "Friday";
-        else if (Calendar.SATURDAY == dayOfWeek) weekDay = "Saturday";
-        else if (Calendar.SUNDAY == dayOfWeek) weekDay = "Sunday";
-
-        mGroupDay = weekDay;
 
 
 

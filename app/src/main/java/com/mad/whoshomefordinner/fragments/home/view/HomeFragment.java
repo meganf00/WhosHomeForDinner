@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -154,8 +155,12 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     @Override
     public void updateRow() {
-        mHomeStatusTxt = mView.findViewById(R.id.home_status);
-
+        
+        if ("Yes".equals(mHomeStatusTxt.getText())) {
+            mHomeStatusTxt.setText("No");
+        } else if ("No".equals(mHomeStatusTxt.getText())) {
+            mHomeStatusTxt.setText("Yes");
+        }
 
         mHomeProgressBar.setVisibility(View.GONE);
         mHomeGroupsView.setVisibility(View.VISIBLE);
@@ -186,6 +191,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         recycle.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recycle, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                mHomeStatusTxt = view.findViewById(R.id.home_status);
+
                 mView = view;
                 mPosition = position;
                 mHomeProgressBar = view.findViewById(R.id.home_status_progress);
@@ -193,6 +200,8 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
                 mHomeProgressBar.setVisibility(View.VISIBLE);
                 mHomeGroupsView.setVisibility(View.GONE);
                 updateHomeStatus(view, position);
+
+
             }
 
             @Override
@@ -203,10 +212,26 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     }
 
+    @Override
+    public void createAllocatedCookToast() {
+        Toast.makeText(getActivity(), "You are the allocated cook. \n You cannot alter your response",
+                Toast.LENGTH_LONG).show();
+        mHomeProgressBar.setVisibility(View.GONE);
+        mHomeGroupsView.setVisibility(View.VISIBLE);
+    }
+
 
     public void updateHomeStatus(View view, int position) {
         mHomeFragmentPresenter.handleRowClick(position);
 
+    }
+
+    @Override
+    public void showPastDeadlineToast() {
+        Toast.makeText(getActivity(), "Deadline has past. \n You cannot alter your response. ",
+                Toast.LENGTH_LONG).show();
+        mHomeProgressBar.setVisibility(View.GONE);
+        mHomeGroupsView.setVisibility(View.VISIBLE);
     }
 
     public void dataUpdated() {

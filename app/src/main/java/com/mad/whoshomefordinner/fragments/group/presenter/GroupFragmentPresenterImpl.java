@@ -7,8 +7,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.mad.whoshomefordinner.fragments.group.model.GroupFragmentFirebaseInteractorImpl;
 import com.mad.whoshomefordinner.fragments.group.view.GroupFragment;
 import com.mad.whoshomefordinner.fragments.group.view.GroupFragmentView;
-import com.mad.whoshomefordinner.fragments.home.model.HomeFragmentFirebaseInteractorImpl;
-import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterImpl;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 

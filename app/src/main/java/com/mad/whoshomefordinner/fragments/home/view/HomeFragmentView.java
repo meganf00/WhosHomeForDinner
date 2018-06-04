@@ -21,4 +21,8 @@ public interface HomeFragmentView {
 
     void getAllocatedCooks();
     void updateHomeStatus(View view, int position);
+
+    void showPastDeadlineToast();
+
+    void createAllocatedCookToast();
 }
