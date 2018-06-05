@@ -32,9 +32,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/title_txt"
             android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            >
+            android:paddingTop="5dp">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/groups_recycler"

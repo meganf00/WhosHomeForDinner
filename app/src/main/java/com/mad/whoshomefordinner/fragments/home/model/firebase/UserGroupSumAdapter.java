@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.fragments.home;
+package com.mad.whoshomefordinner.fragments.home.model.firebase;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,11 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.model.User;

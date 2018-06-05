@@ -4,28 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="5dp"
-    android:layout_centerInParent="true">
+    android:layout_centerInParent="true"
+    android:padding="5dp">
 
     <LinearLayout
         android:id="@+id/group_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:padding="10dp"
-        >
+        android:background="@drawable/border"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/title_group_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Group Name"
-            android:textSize="20sp"
+            android:text="@string/group_name_title"
             android:textAlignment="center"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="#FFFFFF"/>
-
+            android:textColor="@color/colorAccent"
+            android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
     </LinearLayout>
-
-
 </LinearLayout>

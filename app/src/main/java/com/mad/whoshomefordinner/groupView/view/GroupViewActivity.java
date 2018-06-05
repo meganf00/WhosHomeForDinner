@@ -1,5 +1,6 @@
 package com.mad.whoshomefordinner.groupView.view;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,12 @@ import butterknife.ButterKnife;
 public class GroupViewActivity extends AppCompatActivity implements GroupViewView {
 
     private static final String EXCEPTION_TAG = "Error";
+    private static final String EXAMPLE_URL = "play.google.com";
+    private static final String TAG = "Who's home for dinner";
+    private static final String ON_ACT_RESULT = "onActivityResult: requestCode=";
+    private static final String RESULT_CODE =  ", resultCode=";
+    private static final String ON_ACT_RESULT_INV = "onActivityResult: sent invitation ";
+
     private DatabaseReference mWHFDRef;
     private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
@@ -43,8 +51,6 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
     private User mUser;
 
     private Group mGroup;
-
-    TextView mWelcomeText;
 
     @BindView(R.id.group_view_progress)
     ProgressBar mProgressBar;
@@ -75,9 +81,15 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
     @BindView(R.id.group_no_txt)
     TextView mGroupNo;
 
+    @BindView((R.id.group_all))
+    RelativeLayout mAllTxt;
+
     private String mAllocatedCookName;
     private String mHomeStatus;
     private int mMemberCount;
+    private static final String INTENT_GROUP_ID = "groupID";
+    private static final String DB_USER_REF = "User's";
+    private static String USER_ID = "userID";
 
 
     @Override
@@ -88,6 +100,7 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
         setSupportActionBar(mToolbar);
         ButterKnife.bind(this);
 
+
         setTitle(getString(R.string.groups_txt));
 
 
@@ -95,7 +108,7 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
 
         Intent inComingData = getIntent();
-        String groupID = inComingData.getStringExtra("groupID");
+        String groupID = inComingData.getStringExtra(INTENT_GROUP_ID);
 
         mGroupID = groupID;
 
@@ -105,7 +118,7 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
         mUserID = mAuth.getCurrentUser().getUid();
         mWHFDRef = FirebaseDatabase.getInstance().getReference();
-        mUserRef = mWHFDRef.child("User's").child(mUserID);
+        mUserRef = mWHFDRef.child(DB_USER_REF).child(mUserID);
 
         mGroupViewPresenrer = new GroupViewPresenterImpl(mAuth, mWHFDRef, mGroupID);
 
@@ -135,12 +148,13 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
     @Override
     public void showProgressDialog() {
+        mAllTxt.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
-        //TODO Set everything else as invisible
     }
 
     @Override
     public void hideProgressDialog() {
+        mAllTxt.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -155,7 +169,7 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
             mResponseTxt.setVisibility(View.GONE);
             mHomeResponse.setVisibility(View.GONE);
         } else {
-            mCookName.setText(mAllocatedCookName + " " + getString(R.string.is_txt) + " ");
+            mCookName.setText(mAllocatedCookName +  getString(R.string.is_txt));
             mHomeResponse.setText(mHomeStatus);
         }
 
@@ -181,14 +195,13 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
         mAllocatedCookName = mGroupViewPresenrer.getAllocatedCook();
 
         if (userIsAllocatedCook()) {
+
+        } else {
             if (mGroupViewPresenrer.userIsHome()) {
-                mHomeStatus = "Home";
+                mHomeStatus = getString(R.string.home);
             } else {
-                mHomeStatus = "Not Home";
+                mHomeStatus = getString(R.string.not_home);
             }
-
-
-
         }
 
         setNextCookingDay();
@@ -206,11 +219,11 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
             nextCookingDay = mGroupViewPresenrer.getNextCookingDay();
         } catch (NullPointerException e) {
             Log.e(EXCEPTION_TAG, getClass() +  e.getMessage());
-            nextCookingDay = "Try again later.";
+            nextCookingDay = getString(R.string.try_again);
         }
 
         if (nextCookingDay.equals("")) {
-            nextCookingDay = "Try again later.";
+            nextCookingDay = getString(R.string.wed);
         }
 
         getMemberCount();
@@ -231,16 +244,14 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
     public void seeGroupMembers(View view) {
         Intent intent = new Intent(this, ViewGroupMembersActivity.class);
-        intent.putExtra("USERID", mUserID);
+        intent.putExtra(USER_ID , mUserID);
         startActivity(intent);
     }
 
     public void onInviteClicked(View view) {
-        Intent intent = new AppInviteInvitation.IntentBuilder("Invite friends to Who's Home For Dinner")
-                .setMessage("Come try Who's Home For Dinner!")
-                .setDeepLink(Uri.parse("play.google.com"))
-                //TODO Add LOGO
-                //.setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invite_freinds))
+                .setMessage(getString(R.string.come_try))
+                .setDeepLink(Uri.parse(EXAMPLE_URL))
                 .build();
         startActivityForResult(intent, 1);
     }
@@ -248,17 +259,17 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("TAG", "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+        Log.d(TAG, ON_ACT_RESULT + requestCode + RESULT_CODE + resultCode);
 
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 // Get the invitation IDs of all sent messages
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
                 for (String id : ids) {
-                    Log.d("TAG", "onActivityResult: sent invitation " + id);
+                    Log.d(TAG, ON_ACT_RESULT_INV + id);
                 }
             } else {
-                Toast.makeText(getContext(), "Invite failed to send",
+                Toast.makeText(getContext(), R.string.message_fail_toast,
                         Toast.LENGTH_LONG).show();
             }
         }

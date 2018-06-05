@@ -34,10 +34,10 @@
     <string name="title_activity_single_group_view">SingleGroupView</string>
 
     <string name="your_response_txt">Your response:</string>
-    <string name="you_are_are_next_cooking_on">You are are next cooking on:</string>
+    <string name="you_are_are_next_cooking_on">You are are next cooking on:\u0020</string>
     <string name="date_txt">Date</string>
     <string name="group_details">Group Details</string>
-    <string name="group_members">Group Members:</string>
+    <string name="group_members">Group Members:\u0020</string>
     <string name="view">view</string>
     <string name="group_schedule">Group Schedule</string>
     <string name="invite">Invite</string>
@@ -46,9 +46,9 @@
     <string name="groups_txt">Groups</string>
     <string name="is_cooking_meal">is cooking meal</string>
     <string name="title_activity_view_group_members">ViewGroupMembersActivity</string>
-    <string name="is_cooking_txt">cooking</string>
-    <string name="is_txt">is</string>
-    <string name="you_are_txt">You are</string>
+    <string name="is_cooking_txt">cooking\u0020</string>
+    <string name="is_txt">\u0020is\u0020</string>
+    <string name="you_are_txt">You are\u0020</string>
     <string name="please_sign_in">Please sign in.</string>
     <string name="title">Title</string>
     <string name="no_txt">No</string>
@@ -69,4 +69,17 @@
     <string name="not_cooking">You are not cooking tonight</string>
     <string name="is_making">\u0020is making\u0020</string>
     <string name="let_them_know">Let them know by\u0020</string>
+    <string name="hey_name_here_s_the_rundown">Hey {Name}! Here\'s the rundown:</string>
+    <string name="group_name_title">Group Name</string>
+    <string name="your_groups">Your Groups</string>
+    <string name="try_again">Try again later.</string>
+    <string name="wed">Wednesday</string>
+    <string name="home">Home</string>
+    <string name="not_home">Not Home</string>
+    <string name="invite_freinds">Invite friends to Who\'s Home For Dinner</string>
+    <string name="come_try">Come try Who\'s Home For Dinner!</string>
+    <string name="message_fail_toast">Invite failed to send</string>
+    <string name="name">Name</string>
+    <string name="home_not">Home/Not</string>
+    <string name="view_members">View</string>
 </resources>

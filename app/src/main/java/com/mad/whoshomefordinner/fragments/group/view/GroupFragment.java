@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.R;
-import com.mad.whoshomefordinner.fragments.group.GroupViewAdapter;
+import com.mad.whoshomefordinner.fragments.group.model.GroupViewAdapter;
 import com.mad.whoshomefordinner.fragments.group.presenter.GroupFragmentPresenterImpl;
 import com.mad.whoshomefordinner.groupView.view.GroupViewActivity;
 import com.mad.whoshomefordinner.model.Group;
@@ -49,8 +49,12 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
 
     ProgressBar mProgressBar;
 
-    int mPosition;
+    private int mPosition;
 
+    private static final String INTENT_GROUP_ID = "groupID";
+    private static String USER_ID = "userID";
+    private static final String DB_USER_REF = "User's";
+    private static final String DB_GROUP_REF = "Groups";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
         View view = inflater.inflate(R.layout.fragment_group, container, false);
 
         Bundle arguments = getArguments();
-        String userID = arguments.getString("userID");
+        String userID = arguments.getString(USER_ID);
 
         mRecyclerView = view.findViewById(R.id.groups_recycler);
         mProgressBar = view.findViewById(R.id.group_progress_bar);
@@ -76,8 +80,8 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
         mAuth = FirebaseAuth.getInstance();
         mUserID = mAuth.getCurrentUser().getUid();
         mWHFDRef = FirebaseDatabase.getInstance().getReference();
-        mUserRef = mWHFDRef.child("User's").child(mUserID);
-        mGroupsRef = mWHFDRef.child("Groups");
+        mUserRef = mWHFDRef.child(DB_USER_REF).child(mUserID);
+        mGroupsRef = mWHFDRef.child(DB_GROUP_REF);
 
         mGroupFragmentPresenter = new GroupFragmentPresenterImpl(mAuth, mWHFDRef);
 
@@ -128,13 +132,13 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
     }
 
     public void initiateView() {
-        mTitleTxt.setText("Your Groups");
+        mTitleTxt.setText(R.string.your_groups);
 
-        GroupViewAdapter recyleAdapter = new GroupViewAdapter(getContext(), mGroups);
-        RecyclerView.LayoutManager recyle = new GridLayoutManager(this.getActivity(), 1);
-        mRecyclerView.setLayoutManager(recyle);
+        GroupViewAdapter groupViewAdapter = new GroupViewAdapter(getContext(), mGroups);
+        RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(this.getActivity(), 1);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(recyleAdapter);
+        mRecyclerView.setAdapter(groupViewAdapter);
 
         hideProgressDialog();
 
@@ -146,7 +150,7 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
 
 
                 Intent intent = new Intent(getContext(), GroupViewActivity.class);
-                intent.putExtra("groupID", group.getId());
+                intent.putExtra(INTENT_GROUP_ID, group.getId());
                 startActivity(intent);
 
 

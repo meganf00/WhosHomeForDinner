@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mad.whoshomefordinner.R;
 import com.mad.whoshomefordinner.base.BaseView;
-import com.mad.whoshomefordinner.fragments.home.UserGroupSumAdapter;
+import com.mad.whoshomefordinner.fragments.home.model.firebase.UserGroupSumAdapter;
 import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterImpl;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;

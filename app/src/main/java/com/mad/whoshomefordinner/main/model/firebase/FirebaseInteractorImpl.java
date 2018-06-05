@@ -42,7 +42,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
     private static final String NO_DATA = "Database error";
 
     private static final String DB_USER_REF = "User's";
-    private static final String DB_GROUP_REF = "Groups";
+
     private static final String NAME_DB = "Name";
     private static final String EMAIL_DB = "Email";
     private static final String GROUP_DB = "Groups";

@@ -14,34 +14,29 @@
     <RelativeLayout
         android:id="@+id/home_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-        <!-- TODO Strings, design, code -->
         <TextView
             android:id="@+id/welcome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hey {Name}! Here's the rundown:"
+            android:text="@string/hey_name_here_s_the_rundown"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
-            />
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/welcome_text"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/home_groups"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
-
-                />
+                android:scrollbars="vertical" />
 
         </LinearLayout>
 
