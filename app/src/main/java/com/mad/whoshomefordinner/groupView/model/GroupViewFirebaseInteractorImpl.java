@@ -9,15 +9,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.mad.whoshomefordinner.groupView.presenter.GroupViewPresenrerImpl;
+import com.mad.whoshomefordinner.groupView.presenter.GroupViewPresenterImpl;
 import com.mad.whoshomefordinner.groupView.presenter.GroupViewPresenter;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Megan on 31/5/18.
@@ -42,18 +44,20 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
     private String mGroupID;
     private String mGroupName;
     private List<String> mGroupMembers = new ArrayList<>();
-    private List<String> mGroupWeekDays;
     private String mGroupDay;
     private String mGroupAllocatedCook;
     private String mGroupMeal;
     private String mGroupDeadline;
     Group mGroup;
+    private String mAllocatedCookName;
 
     public Group group;
 
-    private GroupViewPresenrerImpl mGroupViewPresenrer;
+    private GroupViewPresenterImpl mGroupViewPresenter;
 
-    private int count = 0;
+    private Map<String, Boolean> mWeekCookingStatus = new HashMap<String, Boolean>();
+    private int mGroupListNo = 0;
+
 
     public GroupViewFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef, String groupID) {
         mAuth = auth;
@@ -69,7 +73,7 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
 
     @Override
     public void getPresenter(GroupViewPresenter mainPresenter) {
-        mGroupViewPresenrer = mainPresenter.getPresenter();
+        mGroupViewPresenter = mainPresenter.getPresenter();
     }
 
     @Override
@@ -108,7 +112,7 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
 
                 mUser = new User(mUserID, mUserName, mUserEmail, mGroupIDs);
                 userCreated();
-                mGroupViewPresenrer.userCreated();
+                mGroupViewPresenter.userCreated();
             }
 
             @Override
@@ -154,6 +158,7 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
                                             } else if (data2.getKey().equals("Home")) {
                                                 Iterable<DataSnapshot> homeSnapShot = data2.getChildren();
                                                 for (DataSnapshot data3 : homeSnapShot) {
+                                                    mGroupListNo += 1;
                                                     if (data3.getValue().equals("True")) {
                                                         String temp = data3.getKey().toString();
                                                         mGroupMembers.add(temp);
@@ -169,7 +174,7 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
                         mGroup = new Group(mGroupID, mGroupName, mGroupMembers, mGroupDay, mGroupAllocatedCook, mGroupMeal, mGroupDeadline);
                     }
 
-                    mGroupViewPresenrer.groupCreated();
+                    mGroupViewPresenter.groupCreated();
 
 
                 }
@@ -197,6 +202,458 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
     @Override
     public boolean userCreated() {
         return true;
+    }
+
+    @Override
+    public void generateAllocatedCook() {
+        DatabaseReference cookNameRef = mWHFDRef.child("User's").child(mGroupAllocatedCook);
+        cookNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        if ("Name".equals(item.getKey())){
+                            mAllocatedCookName = item.getValue().toString();
+                            break;
+                        }
+                    }
+                }
+                mGroupViewPresenter.allocatedCookNameGenerated();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public boolean checkUserIsCook() {
+        if (mUserID.equals(mGroupAllocatedCook)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String getAllocatedCookName() {
+        return mAllocatedCookName;
+    }
+
+    @Override
+    public Boolean isUserHome() {
+        boolean home = false;
+        for (String member : mGroupMembers) {
+            if (mUserID.equals(member)){
+                home =  true;
+                break;
+            }
+        }
+        return home;
+    }
+
+    @Override
+    public void findNextCookDay() {
+        mGroupRef.child(mGroupID).child("Current Week").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        Iterable<DataSnapshot> weekDaysSnapshot = item.getChildren();
+                        for (DataSnapshot day : weekDaysSnapshot) {
+                            if ("Sunday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Sunday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Sunday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Monday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Monday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Monday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Tuesday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Tuesday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Tuesday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Wednesday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Wednesday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Wednesday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Thursday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Thursday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Thursday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Friday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Friday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Friday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            } else if ("Saturday".equals(day.getKey())) {
+                                Iterable<DataSnapshot> dayData = item.getChildren();
+                                for (DataSnapshot data : dayData) {
+                                    if ("AllocatedCook".equals(data.getKey())) {
+                                        if (mUserID.equals(data.getValue())) {
+                                            mWeekCookingStatus.put("Saturday", true);
+                                        } else {
+                                            mWeekCookingStatus.put("Saturday", false);
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                mGroupViewPresenter.cookingDaysGenerated();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public String getNextCookDay() throws RuntimeException, NullPointerException {
+
+        String day = "";
+
+
+            if (mGroupDay == "Sunday") {
+
+                if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                }
+
+
+            } else if (mGroupDay.equals("Monday")) {
+
+                if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                }
+
+            } else if (mGroupDay.equals("Tuesday")) {
+            if (mWeekCookingStatus.containsKey("Tuesday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Tuesday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Wednesday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Thursday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Friday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Friday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Saturday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Sunday";
+
+                }
+            } else if (mWeekCookingStatus.containsKey("Monday")) {
+                if (mWeekCookingStatus.containsValue(true)) {
+                    day = "Monday";
+
+                }
+            }
+
+
+            } else if (mGroupDay.equals("Wednesday")) {
+
+                if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                }
+
+            } else if (mGroupDay.equals("Thursday")) {
+
+                if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                }
+
+            } else if (mGroupDay.equals("Friday")) {
+
+                if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                }
+
+            } else if (mGroupDay.equals("Saturday")) {
+                if (mWeekCookingStatus.containsKey("Saturday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Saturday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Sunday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Sunday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Monday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Monday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Tuesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Tuesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Wednesday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Wednesday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Thursday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Thursday";
+
+                    }
+                } else if (mWeekCookingStatus.containsKey("Friday")) {
+                    if (mWeekCookingStatus.containsValue(true)) {
+                        day = "Friday";
+
+                    }
+                }
+
+            }
+
+
+
+        return day;
+    }
+
+    @Override
+    public int getMemberCount() {
+        return mGroupListNo;
     }
 }
 

@@ -9,13 +9,11 @@ import com.mad.whoshomefordinner.groupView.view.GroupViewView;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
-import java.util.List;
-
 /**
  * Created by Megan on 31/5/18.
  */
 
-public class GroupViewPresenrerImpl implements GroupViewPresenter{
+public class GroupViewPresenterImpl implements GroupViewPresenter{
 
     FirebaseAuth mAuth;
     private GroupViewView mGroupViewView;
@@ -25,7 +23,7 @@ public class GroupViewPresenrerImpl implements GroupViewPresenter{
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     String mGroupID;
 
-    public GroupViewPresenrerImpl(FirebaseAuth auth, DatabaseReference WHFDRef, String groupdID){
+    public GroupViewPresenterImpl(FirebaseAuth auth, DatabaseReference WHFDRef, String groupdID){
         mAuth = auth;
         mWHFDRef = WHFDRef;
         mGroupID = groupdID;
@@ -37,7 +35,7 @@ public class GroupViewPresenrerImpl implements GroupViewPresenter{
     }
 
     @Override
-    public GroupViewPresenrerImpl getPresenter() {
+    public GroupViewPresenterImpl getPresenter() {
         return this;
     }
 
@@ -49,6 +47,51 @@ public class GroupViewPresenrerImpl implements GroupViewPresenter{
     @Override
     public void setUpUser() {
         mGroupViewFirebaseInteractor.createUser();
+    }
+
+    @Override
+    public void setUpAllocatedCook() {
+        mGroupViewFirebaseInteractor.generateAllocatedCook();
+    }
+
+    @Override
+    public boolean isUserAllocatedCook() {
+        return mGroupViewFirebaseInteractor.checkUserIsCook();
+    }
+
+    @Override
+    public void allocatedCookNameGenerated() {
+        mGroupViewView.getAllocatedCookName();
+    }
+
+    @Override
+    public String getAllocatedCook() {
+        return mGroupViewFirebaseInteractor.getAllocatedCookName();
+    }
+
+    @Override
+    public boolean userIsHome() {
+        return mGroupViewFirebaseInteractor.isUserHome();
+    }
+
+    @Override
+    public void setNextDate() {
+        mGroupViewFirebaseInteractor.findNextCookDay();
+    }
+
+    @Override
+    public void cookingDaysGenerated() {
+        mGroupViewView.getNextCookingDay();
+    }
+
+    @Override
+    public String getNextCookingDay() throws RuntimeException, NullPointerException {
+        return mGroupViewFirebaseInteractor.getNextCookDay();
+    }
+
+    @Override
+    public int getNoMembers() {
+        return mGroupViewFirebaseInteractor.getMemberCount();
     }
 
 

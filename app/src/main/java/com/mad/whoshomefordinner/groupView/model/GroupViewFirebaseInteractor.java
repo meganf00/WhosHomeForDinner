@@ -18,4 +18,17 @@ public interface GroupViewFirebaseInteractor {
     void createUser();
     boolean userCreated();
 
+    void generateAllocatedCook();
+
+    boolean checkUserIsCook();
+
+    String getAllocatedCookName();
+
+    Boolean isUserHome();
+
+    void findNextCookDay();
+
+    String getNextCookDay();
+
+    int getMemberCount();
 }

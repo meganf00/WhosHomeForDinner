@@ -1,4 +1,4 @@
-package com.mad.whoshomefordinner.main.activity;
+package com.mad.whoshomefordinner.main.view;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -29,7 +29,6 @@ import com.mad.whoshomefordinner.fragments.notifications.NotificationsFragment;
 import com.mad.whoshomefordinner.fragments.schedule.ScheduleFragment;
 import com.mad.whoshomefordinner.fragments.settings.SettingsFragment;
 import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
-import com.mad.whoshomefordinner.main.view.MainView;
 import com.mad.whoshomefordinner.model.User;
 
 import butterknife.BindView;
@@ -37,6 +36,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
+
+    private static String USER_ID = "userID";
 
     private View mNavHeader;
 
@@ -114,24 +115,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_sign_out) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -168,11 +151,8 @@ public class MainActivity extends BaseActivity
 
     private void displaySelectedFragment(Fragment fragment, User user) {
         Bundle bundle = new Bundle();
-        //bundle.putParcelable("User", mUser);
-        bundle.putString("userID", mUser.getId().toString());
-        bundle.putString("userName", mUser.getName().toString());
-        bundle.putString("userMail", mUser.getEmail().toString());
-        bundle.putString("userGroups", mUser.getGroups().toString());
+
+        bundle.putString(USER_ID, mUser.getId().toString());
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

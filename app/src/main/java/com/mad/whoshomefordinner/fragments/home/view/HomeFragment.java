@@ -64,6 +64,9 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     private int mPosition;
     private View mView;
 
+    private static final String USER_ID = "userID";
+    private static final String DB_REFERENCE_USERS = "User's";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
 
         Bundle arguments = getArguments();
-        String userID = arguments.getString("userID");
+        String userID = arguments.getString(USER_ID);
 
 
         // Inflate the layout for this fragment
@@ -98,15 +101,13 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
         mUserID = mAuth.getCurrentUser().getUid().toString();
         mWHFDRef = FirebaseDatabase.getInstance().getReference();
-        mUserRef = mWHFDRef.child("User's").child(mUserID);
+        mUserRef = mWHFDRef.child(DB_REFERENCE_USERS).child(mUserID);
 
         mHomeFragmentPresenter = new HomeFragmentPresenterImpl(mAuth, mWHFDRef);
 
         mHomeFragmentPresenter.attachView(this);
         mHomeFragmentPresenter.setUpInteractor();
         mHomeFragmentPresenter.connectWithInteractor();
-
-        // mHomeProgressBar.findViewById(R.id.home_status_progress);
 
         mHomeFragmentPresenter.setUpUser();
 
@@ -155,11 +156,11 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     @Override
     public void updateRow() {
-        
-        if ("Yes".equals(mHomeStatusTxt.getText())) {
-            mHomeStatusTxt.setText("No");
-        } else if ("No".equals(mHomeStatusTxt.getText())) {
-            mHomeStatusTxt.setText("Yes");
+
+        if (getString(R.string.yes_txt).equals(mHomeStatusTxt.getText())) {
+            mHomeStatusTxt.setText(R.string.no_txt);
+        } else if (getString(R.string.no_txt).equals(mHomeStatusTxt.getText())) {
+            mHomeStatusTxt.setText(R.string.yes_txt);
         }
 
         mHomeProgressBar.setVisibility(View.GONE);
@@ -178,11 +179,11 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
         mUserName = mUser.getName();
 
-        mWelcomeText.setText(getString(R.string.welcome_txt_hey) + mUserName + getString(R.string.welcome_txt_rundown));
+        mWelcomeText.setText(getString(R.string.welcome_txt_hey)  + mUserName);
 
         mRecyclerAdapter = new UserGroupSumAdapter(getContext(), groups , mUser, mAllocatedCooks);
-        final RecyclerView.LayoutManager recyce = new GridLayoutManager(this.getActivity(),1);
-        recycle.setLayoutManager(recyce);
+        final RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getActivity(),1);
+        recycle.setLayoutManager(layoutManager);
         recycle.setItemAnimator( new DefaultItemAnimator());
         recycle.setAdapter(mRecyclerAdapter);
 
@@ -196,7 +197,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
                 mView = view;
                 mPosition = position;
                 mHomeProgressBar = view.findViewById(R.id.home_status_progress);
-                mHomeGroupsView = view.findViewById(R.id.home_body);
+                mHomeGroupsView = view.findViewById(R.id.body);
                 mHomeProgressBar.setVisibility(View.VISIBLE);
                 mHomeGroupsView.setVisibility(View.GONE);
                 updateHomeStatus(view, position);
@@ -214,7 +215,7 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     @Override
     public void createAllocatedCookToast() {
-        Toast.makeText(getActivity(), "You are the allocated cook. \n You cannot alter your response",
+        Toast.makeText(getActivity(), R.string.allocated_cook_txt,
                 Toast.LENGTH_LONG).show();
         mHomeProgressBar.setVisibility(View.GONE);
         mHomeGroupsView.setVisibility(View.VISIBLE);
@@ -228,13 +229,10 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
 
     @Override
     public void showPastDeadlineToast() {
-        Toast.makeText(getActivity(), "Deadline has past. \n You cannot alter your response. ",
+        Toast.makeText(getActivity(), R.string.deadline_has_past_txt,
                 Toast.LENGTH_LONG).show();
         mHomeProgressBar.setVisibility(View.GONE);
         mHomeGroupsView.setVisibility(View.VISIBLE);
     }
 
-    public void dataUpdated() {
-        mRecyclerAdapter.notifyDataSetChanged();
-    }
 }

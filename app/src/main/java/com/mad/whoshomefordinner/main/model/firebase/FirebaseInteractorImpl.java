@@ -1,7 +1,6 @@
 package com.mad.whoshomefordinner.main.model.firebase;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,20 +8,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mad.whoshomefordinner.main.activity.MainActivity;
-import com.mad.whoshomefordinner.main.presenter.MainPresenter;
 import com.mad.whoshomefordinner.main.presenter.MainPresenterImpl;
 import com.mad.whoshomefordinner.model.Group;
 import com.mad.whoshomefordinner.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-
-import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 /**
  * Created by Megan on 27/5/18.
@@ -46,6 +38,14 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
 
     private MainPresenterImpl mMainPresenter;
 
+    private static final String TAG = "Who's Home For Dinner" ;
+    private static final String NO_DATA = "Database error";
+
+    private static final String DB_USER_REF = "User's";
+    private static final String DB_GROUP_REF = "Groups";
+    private static final String NAME_DB = "Name";
+    private static final String EMAIL_DB = "Email";
+    private static final String GROUP_DB = "Groups";
 
     public FirebaseInteractorImpl(FirebaseAuth auth, Activity context, DatabaseReference WHFDRef) {
         mAuth = auth;
@@ -55,7 +55,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
         if (mAuth.getCurrentUser() != null) {
             mUserID = mAuth.getCurrentUser().getUid();
             mWHFDRef2 = WHFDRef;
-            mUserRef2 = mWHFDRef2.child("User's").child(mUserID);
+            mUserRef2 = mWHFDRef2.child(DB_USER_REF).child(mUserID);
 
         }
 
@@ -74,11 +74,11 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     for (DataSnapshot item : dataSnapshot.getChildren()) {
-                        if ("Name".equals(item.getKey())) {
+                        if (NAME_DB.equals(item.getKey())) {
                             name = item.getValue().toString();
-                        } else if ("Email".equals(item.getKey())) {
+                        } else if (EMAIL_DB.equals(item.getKey())) {
                             email = item.getValue().toString();
-                        } else if ("Groups".equals(item.getKey())) {
+                        } else if (GROUP_DB.equals(item.getKey())) {
                             Iterable<DataSnapshot> groupSnapShot = item.getChildren();
                             for (DataSnapshot data : groupSnapShot) {
                                 String temp = data.getKey().toString();
@@ -88,7 +88,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
                     }
                 }
                  else {
-                    Log.d("TAG", "null");
+                    Log.d(TAG, NO_DATA);
                 }
 
                 mUser = new User(mUserID, name, email, groupTemp);
@@ -105,10 +105,6 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
 
         });
 
-        //setUpGroup(groupTemp);
-
-
-
     }
 
     @Override
@@ -119,11 +115,6 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
     @Override
     public User getUser() {
         return mUser;
-    }
-
-    @Override
-    public List<Group> getGroups() {
-        return null;
     }
 
     @Override
@@ -139,30 +130,5 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
     public void logOut() {
         mAuth.signOut();
     }
-
-    public void createGroups(final List<String> groupTempList) {
-        DatabaseReference groupRef = mWHFDRef2.child("Groups");
-        groupRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    for (DataSnapshot item : dataSnapshot.getChildren()) {
-//                        for (String id : groupTemp){
-//                            if (id == item.getKey()) {
-//                                groups.add(item.getValue(Group.class));
-//                            }
-//                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
 
 }

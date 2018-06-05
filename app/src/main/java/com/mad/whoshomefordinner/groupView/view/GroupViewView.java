@@ -14,4 +14,10 @@ public interface GroupViewView extends BaseView {
     void getGroup();
     void initiateView();
     void setUpGroups();
+
+    void getAllocatedCookName();
+
+    void getNextCookingDay();
+
+    void getMemberCount();
 }

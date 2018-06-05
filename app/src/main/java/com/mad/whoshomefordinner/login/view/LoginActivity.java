@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.mad.whoshomefordinner.base.BaseActivity;
 import com.mad.whoshomefordinner.login.presenter.LoginPresenter;
 import com.mad.whoshomefordinner.login.presenter.LoginPresenterImpl;
-import com.mad.whoshomefordinner.main.activity.MainActivity;
+import com.mad.whoshomefordinner.main.view.MainActivity;
 import com.mad.whoshomefordinner.R;
 
 import butterknife.OnClick;

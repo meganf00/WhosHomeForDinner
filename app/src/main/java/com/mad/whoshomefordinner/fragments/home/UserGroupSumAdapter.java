@@ -29,7 +29,6 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     private Context mContext;
     private List<Group> mGroupList;
     private User mUser;
-    private String tempNameCook = "";
     private List<String> mAllocatedCookName;
 
 
@@ -74,17 +73,17 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
         holder.groupName.setText(groups.getName());
         if (mUser.getId().equals(groups.getAllocatedCook())) {
             //current user is cooking tonight
-            holder.cookingStatus.setText("You are cooking tonight");
-            holder.whoCooking.setText("You are making ");
-            holder.deadline.setText("Your deadline is" + " " + groups.getDeadline());
+            holder.cookingStatus.setText(R.string.you_are_cooking);
+            holder.whoCooking.setText(R.string.making);
+            holder.deadline.setText(mContext.getString(R.string.deadline_is) + groups.getDeadline());
             holder.noPeopleHome.setText(Integer.toString(groups.getGroupMembers().size()));
-            holder.homeQuestionOrNumber.setText("Number of people RSVD'd: ");
-            holder.homeStatus.setText("");
+            holder.homeQuestionOrNumber.setText(R.string.RSVDd);
+            holder.homeStatus.setVisibility(View.GONE);
         } else {
             //current user is not cooking
             holder.noPeopleHome.setVisibility(View.GONE);
-            holder.homeQuestionOrNumber.setText("Are you home? ");
-            holder.cookingStatus.setText("You are not cooking tonight");
+            holder.homeQuestionOrNumber.setText(R.string.home_q);
+            holder.cookingStatus.setText(R.string.not_cooking);
 
             boolean home = false;
             List<String> tempMembers = groups.getGroupMembers();
@@ -99,12 +98,12 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
             }
 
             if (home) {
-                holder.homeStatus.setText("Yes");
+                holder.homeStatus.setText(R.string.yes_txt);
             } else {
-                holder.homeStatus.setText("No");
+                holder.homeStatus.setText(R.string.no_txt);
             }
-            holder.whoCooking.setText(allocatedCook + " " + "is making ");
-            holder.deadline.setText("Let them know by " + groups.getDeadline());
+            holder.whoCooking.setText(allocatedCook + mContext.getString(R.string.is_making));
+            holder.deadline.setText(mContext.getString(R.string.let_them_know) + groups.getDeadline());
         }
         holder.meal.setText(groups.getMeal());
 

@@ -1,8 +1,6 @@
 package com.mad.whoshomefordinner.groupView.presenter;
 
 import com.mad.whoshomefordinner.base.BasePresenter;
-import com.mad.whoshomefordinner.base.BaseView;
-import com.mad.whoshomefordinner.fragments.home.presenter.HomeFragmentPresenterImpl;
 import com.mad.whoshomefordinner.groupView.view.GroupViewView;
 import com.mad.whoshomefordinner.model.User;
 
@@ -16,7 +14,25 @@ public interface GroupViewPresenter extends BasePresenter<GroupViewView> {
     void onStop();
     void userCreated();
     void setUpInteractor();
-    GroupViewPresenrerImpl getPresenter();
+    GroupViewPresenterImpl getPresenter();
     void connectWithInteractor();
     void setUpUser();
+
+    void setUpAllocatedCook();
+
+    boolean isUserAllocatedCook();
+
+    void allocatedCookNameGenerated();
+
+    String getAllocatedCook();
+
+    boolean userIsHome();
+
+    void setNextDate();
+
+    void cookingDaysGenerated();
+
+    String getNextCookingDay();
+
+    int getNoMembers();
 }

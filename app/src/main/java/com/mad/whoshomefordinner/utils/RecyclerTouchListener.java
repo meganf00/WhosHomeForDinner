@@ -13,6 +13,9 @@ import android.view.View;
  * Class that creates an on click listener
  * for each view in a RecyclerView
  *
+ * https://medium.com/@harivigneshjayapalan/
+ * android-recyclerview-implementing-single-item-click-and-long-press-part-ii-b43ef8cb6ad8
+ *
  * @author Megan Farleigh
  */
 

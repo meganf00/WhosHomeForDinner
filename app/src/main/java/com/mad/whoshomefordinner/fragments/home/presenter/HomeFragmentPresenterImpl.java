@@ -18,9 +18,8 @@ import java.util.List;
 
 public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     private HomeFragmentView mHomeFragmentView;
-    private Activity mContext;
     private HomeFragmentFirebaseInteractorImpl mHomeFragFBInteratorImpl;
     private DatabaseReference mWHFDRef;
     private FirebaseAuth.AuthStateListener mAuthStateListener;

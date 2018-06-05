@@ -11,9 +11,8 @@ import java.util.List;
  */
 
 public interface FirebaseInteractor {
-    public void getPresenter(MainPresenterImpl mainPresenter);
+    void getPresenter(MainPresenterImpl mainPresenter);
     User getUser();
-    List<Group> getGroups();
     boolean isSignedIn();
     void logOut();
     void createUser();
