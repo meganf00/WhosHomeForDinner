@@ -11,6 +11,10 @@ import com.mad.whoshomefordinner.login.view.LoginView;
 
 /**
  * Created by Megan on 20/5/18.
+ *
+ * LoginPresenterImpl implements the interface LoginPresenter to communicate with
+ * the View to check if the user's credentials are correct when logging in.
+ *
  */
 
 public class LoginPresenterImpl implements LoginPresenter {
@@ -18,6 +22,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     private FirebaseAuth mAuth;
     private LoginView mLoginView;
 
+    /**
+     * Constructor to initialise the method with the view and FirebaseAuth
+     * @param auth
+     */
     public LoginPresenterImpl(FirebaseAuth auth) {
         this.mAuth = auth;
     }

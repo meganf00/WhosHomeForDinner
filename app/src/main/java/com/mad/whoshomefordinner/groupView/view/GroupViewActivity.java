@@ -29,6 +29,13 @@ import com.mad.whoshomefordinner.viewgroupmembers.ViewGroupMembersActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Date created: 04/06/18
+ *
+ * Corresponding java class to the layout GroupView to display the GroupView Activity and
+ * inflate all the widgets.
+ */
+
 public class GroupViewActivity extends AppCompatActivity implements GroupViewView {
 
     private static final String EXCEPTION_TAG = "Error";
@@ -136,7 +143,13 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
     @Override
     public Context getContext() {
-        return getContext();
+        try {
+            return getContext();
+        } catch (RuntimeException e) {
+            Log.d(TAG, e.getMessage());
+            return null;
+        }
+
     }
 
     @Override
@@ -181,7 +194,8 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
         hideProgressDialog();
     }
 
-    private boolean userIsAllocatedCook() {
+    @Override
+    public boolean userIsAllocatedCook() {
         return mGroupViewPresenrer.isUserAllocatedCook();
     }
 
@@ -209,7 +223,8 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
     }
 
-    private void setNextCookingDay() {
+    @Override
+    public void setNextCookingDay() {
         mGroupViewPresenrer.setNextDate();
     }
 
@@ -242,12 +257,22 @@ public class GroupViewActivity extends AppCompatActivity implements GroupViewVie
 
     }
 
+    /**
+     * onCLick, opens new intent for viewing the members of the group
+     * @param view
+     */
     public void seeGroupMembers(View view) {
         Intent intent = new Intent(this, ViewGroupMembersActivity.class);
         intent.putExtra(USER_ID , mUserID);
         startActivity(intent);
     }
 
+    /**
+     * onClick, create new AppInviteInvitation intent, using Firebase invites, to
+     * invites people to use the application
+     *
+     * @param view
+     */
     public void onInviteClicked(View view) {
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invite_freinds))
                 .setMessage(getString(R.string.come_try))

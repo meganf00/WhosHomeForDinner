@@ -23,6 +23,9 @@ import java.util.Map;
 
 /**
  * Created by Megan on 31/5/18.
+ *
+ * GroupViewFirebaseInteractorImpl is a class, which implements the
+ * GroupViewFirebaseInteractor handle all the Firebase logic.
  */
 
 public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInteractor {
@@ -74,6 +77,15 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
     private static final String TRUE_DB = "True";
     private static final String FALSE_DB = "False";
 
+
+    /**
+     * Constructor to create an instance of the GroupViewFirebaseInteractorImpl
+     * for communication between the presenter and the Firebase interactor
+     *
+     * @param auth
+     * @param WHFDRef
+     * @param groupID
+     */
 
     public GroupViewFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef, String groupID) {
         mAuth = auth;
@@ -141,6 +153,7 @@ public class GroupViewFirebaseInteractorImpl implements GroupViewFirebaseInterac
         });
     }
 
+    @Override
     public void createGroup(){
 
 

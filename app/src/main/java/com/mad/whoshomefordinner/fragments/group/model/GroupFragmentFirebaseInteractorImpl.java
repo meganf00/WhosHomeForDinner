@@ -24,6 +24,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Megan on 30/5/18.
+ *
+ * GroupFragmentFirebaseInteractorImpl is a class, which implements the
+ * GroupFragmentFirebaseInteractor to handle all the Firebase logic.
  */
 
 public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebaseInteractor{
@@ -74,6 +77,13 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
     private static final String TAG = "Who's Home For Dinner" ;
     private static final String NO_DATA = "Database error";
 
+
+    /**
+     * Constructor to create an instance of the GroupFragmentFirebaseInteractorImpl
+     * for communication between the presenter and the Firebase interactor
+     * @param auth
+     * @param WHFDRef
+     */
     public GroupFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
         mAuth = auth;
 
@@ -101,7 +111,7 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
 
     @Override
     public void createUser() {
-        mUserRef.addValueEventListener(new ValueEventListener() {
+        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
@@ -150,7 +160,7 @@ public class GroupFragmentFirebaseInteractorImpl implements GroupFragmentFirebas
 
 
         for (final String groupID : mGroupIDs) {
-            mGroupRef.child(groupID).addValueEventListener(new ValueEventListener() {
+            mGroupRef.child(groupID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null) {

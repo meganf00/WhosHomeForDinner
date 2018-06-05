@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 /**
  * Created by Megan on 23/5/18.
+ *
+ * Class Day is created to create a Day object.
  */
 
 public class Day {

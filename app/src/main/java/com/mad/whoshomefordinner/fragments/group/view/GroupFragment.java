@@ -29,6 +29,11 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * GroupFragment is the corresponding java class for the fragment view,
+ * which sets up the UI of the fragment, and communciates with the
+ * presenter of this class. It shows a list of groups the user is
+ * a member of.
  */
 public class GroupFragment extends Fragment implements GroupFragmentView {
 
@@ -131,6 +136,10 @@ public class GroupFragment extends Fragment implements GroupFragmentView {
         }
     }
 
+
+    /**
+     * Initialises and creates the view. It is called after acquiring all required data
+     */
     public void initiateView() {
         mTitleTxt.setText(R.string.your_groups);
 

@@ -11,6 +11,8 @@ import java.util.Map;
 
 /**
  * Created by Megan on 23/5/18.
+ *
+ * Class user is created to make objects based on parsed data
  */
 
 public class User implements Parcelable{

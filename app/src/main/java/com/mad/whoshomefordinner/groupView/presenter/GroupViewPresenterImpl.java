@@ -11,6 +11,10 @@ import com.mad.whoshomefordinner.model.User;
 
 /**
  * Created by Megan on 31/5/18.
+ *
+ * GroupViewPresenterImpl is a class, which implements the GroupViewPresenter
+ * and is used as a communication means between the GroupVIewView and
+ * the GroupViewPresenter.
  */
 
 public class GroupViewPresenterImpl implements GroupViewPresenter{
@@ -23,6 +27,15 @@ public class GroupViewPresenterImpl implements GroupViewPresenter{
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     String mGroupID;
 
+
+    /**
+     * Constructor to create an instance of the GroupViewPresenterImpl
+     * for communication between the view and the model.
+     *
+     * @param auth
+     * @param WHFDRef
+     * @param groupdID
+     */
     public GroupViewPresenterImpl(FirebaseAuth auth, DatabaseReference WHFDRef, String groupdID){
         mAuth = auth;
         mWHFDRef = WHFDRef;
@@ -114,23 +127,21 @@ public class GroupViewPresenterImpl implements GroupViewPresenter{
         mGroupViewFirebaseInteractor.createGroup();
     }
 
+    /**
+     * Gets the current group selected and returns it
+     * @return Group
+     */
     public Group getGroup() {
         return mGroupViewFirebaseInteractor.getGroup();
     }
 
+    /**
+     * Creates a group based on the current one selected
+     */
     public void groupCreated() {
         mGroupViewView.getGroup();
     }
 
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
 
     @Override
     public void userCreated() {

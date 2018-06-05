@@ -11,13 +11,11 @@ import com.mad.whoshomefordinner.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Java class that corresponds to the fragment layout Notification and
+ * generates the fragment
  */
 public class NotificationsFragment extends Fragment {
-
-
-    public NotificationsFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override

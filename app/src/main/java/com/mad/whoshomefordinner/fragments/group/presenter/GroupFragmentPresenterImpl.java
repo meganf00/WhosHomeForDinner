@@ -14,6 +14,11 @@ import java.util.List;
 
 /**
  * Created by Megan on 30/5/18.
+ *
+ * GroupFragmentPresenterImpl is a class, which implements the GroupFragmentPresenter
+ * and is used as a communication means between the GroupFragmentView and
+ * the GroupFragmentFirebaseInteractor.
+ *
  */
 
 public class GroupFragmentPresenterImpl implements GroupFragmentPresenter {
@@ -25,6 +30,12 @@ public class GroupFragmentPresenterImpl implements GroupFragmentPresenter {
     private DatabaseReference mWHFDRef;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    /**
+     * Constructor to create an instance of the GroupFragmentPresenterImpl
+     * for communication between the view and the model.
+     * @param auth
+     * @param WHFDRef
+     */
     public GroupFragmentPresenterImpl(FirebaseAuth auth, DatabaseReference WHFDRef){
         mAuth = auth;
         mWHFDRef = WHFDRef;
@@ -43,16 +54,6 @@ public class GroupFragmentPresenterImpl implements GroupFragmentPresenter {
     @Override
     public User getCurrentUser() {
         return mGroupFragmentFirebaseInteractor.getUser();
-    }
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onStop() {
-
     }
 
     @Override
@@ -80,14 +81,17 @@ public class GroupFragmentPresenterImpl implements GroupFragmentPresenter {
         mGroupFragmentFirebaseInteractor.createUser();
     }
 
+    @Override
     public void setUpGroups() {
         mGroupFragmentFirebaseInteractor.createGroups();
     }
 
+    @Override
     public List<Group> getGroups() {
         return mGroupFragmentFirebaseInteractor.getGroups();
     }
 
+    @Override
     public void groupsCreated() {
         mGroupFragmentView.getGroups();
     }

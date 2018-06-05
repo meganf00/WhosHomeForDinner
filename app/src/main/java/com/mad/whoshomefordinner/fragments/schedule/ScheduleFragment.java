@@ -11,13 +11,11 @@ import com.mad.whoshomefordinner.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Java class that corresponds to the fragment layout ScheduleFragment and
+ * generates the fragment
  */
 public class ScheduleFragment extends Fragment {
-
-
-    public ScheduleFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override

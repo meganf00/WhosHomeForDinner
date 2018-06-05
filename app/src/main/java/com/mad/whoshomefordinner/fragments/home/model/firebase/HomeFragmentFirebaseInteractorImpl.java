@@ -24,6 +24,9 @@ import java.util.Locale;
 
 /**
  * Created by Megan on 29/5/18.
+ *
+ * HomeFragmentFirebaseInteractorImpl is a class, which implements the
+ * HomeFragmentFirebaseInteractorto handle all the Firebase logic.
  */
 
 public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseInteractor{
@@ -76,6 +79,13 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     private static final String TRUE_DB = "True";
     private static final String FALSE_DB = "False";
 
+
+    /**
+     * Constructor to create an instance of the HomeFragmentFirebaseInteractorImpl
+     * for communication between the presenter and the Firebase interactor
+     * @param auth
+     * @param WHFDRef
+     */
     public HomeFragmentFirebaseInteractorImpl(FirebaseAuth auth, DatabaseReference WHFDRef) {
         mAuth = auth;
 
@@ -140,6 +150,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
         });
     }
 
+    @Override
     public void createGroups(){
 
         Calendar c = Calendar.getInstance();

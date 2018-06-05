@@ -14,6 +14,10 @@ import java.util.List;
 
 /**
  * Created by Megan on 29/5/18.
+ *
+ * HomeFragmentPresenterImpl is a class, which implements the HomeFragmentPresenter
+ * and is used as a communication means between the HomeFragmentVIew and
+ * the HomeFragmentFirebaseInteractor.
  */
 
 public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
@@ -24,6 +28,13 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     private DatabaseReference mWHFDRef;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+
+    /**
+     * Constructor to create an instance of the HomeFragmentPresenterImpl
+     * for communication between the view and the model.
+     * @param auth
+     * @param WHFDRef
+     */
     public HomeFragmentPresenterImpl(FirebaseAuth auth, DatabaseReference WHFDRef){
         mAuth = auth;
         mWHFDRef = WHFDRef;
@@ -82,33 +93,28 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
         return mHomeFragFBInteratorImpl.getUser();
     }
 
+    @Override
     public void setUpGroups() {
         mHomeFragFBInteratorImpl.createGroups();
     }
 
+    @Override
     public List<Group> getGroups() {
         return mHomeFragFBInteratorImpl.getGroups();
     }
 
+    @Override
     public void groupsCreated() {
         mHomeFragmentView.getGroups();
     }
 
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
 
     @Override
     public void userCreated() {
         mHomeFragmentView.setUpFragment();
     }
 
+    @Override
     public void handleRowClick(int position) {
         mHomeFragFBInteratorImpl.updateHomeStatus(position);
     }

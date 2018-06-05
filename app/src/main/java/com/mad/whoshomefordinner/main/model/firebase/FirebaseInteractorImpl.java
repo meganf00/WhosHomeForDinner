@@ -18,6 +18,9 @@ import java.util.List;
 
 /**
  * Created by Megan on 27/5/18.
+ *
+ * FirebaseInteractorImpl is a class, which implements the
+ * FirebaseInteractor to handle all the Firebase logic.
  */
 
 public class FirebaseInteractorImpl implements FirebaseInteractor {
@@ -46,6 +49,14 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
     private static final String NAME_DB = "Name";
     private static final String EMAIL_DB = "Email";
     private static final String GROUP_DB = "Groups";
+
+    /**
+     * Constructor to create an instance of the MainFirebaseInteractorImpl
+     * for communication between the presenter and the Firebase interactor
+     * @param auth
+     * @param context
+     * @param WHFDRef
+     */
 
     public FirebaseInteractorImpl(FirebaseAuth auth, Activity context, DatabaseReference WHFDRef) {
         mAuth = auth;
@@ -93,7 +104,7 @@ public class FirebaseInteractorImpl implements FirebaseInteractor {
 
                 mUser = new User(mUserID, name, email, groupTemp);
                 userCreated();
-                mMainPresenter.userCreatedYay();
+                mMainPresenter.userCreated();
             }
 
             @Override

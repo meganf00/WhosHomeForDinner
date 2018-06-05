@@ -17,6 +17,9 @@ import java.util.List;
 
 /**
  * Created by Megan on 25/5/18.
+ *
+ * Adapter for RecyclerView implemented in view to create and bind views which related
+ * to each data set
  */
 
 public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapter.ViewHolder>  {
@@ -27,6 +30,13 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
     private List<String> mAllocatedCookName;
 
 
+    /**
+     * Constructor used to create and initialise the adapter
+     * @param context
+     * @param groups
+     * @param user
+     * @param allocatedCookName
+     */
     public UserGroupSumAdapter(Context context, List<Group> groups, User user, List<String> allocatedCookName) {
         mGroupList = groups;
         mContext = context;
@@ -34,10 +44,21 @@ public class UserGroupSumAdapter extends RecyclerView.Adapter<UserGroupSumAdapte
         mAllocatedCookName = allocatedCookName;
     }
 
+
+    /**
+     * The ViewHolder class is created to optimise the RecyclerView by avoiding intensive work
+     * for the CPU. It holds an instance of the id of the view.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView groupName, cookingStatus, whoCooking, meal, deadline, homeQuestionOrNumber,
         noPeopleHome, homeStatus;
         public LinearLayout recycleGroup;
+
+        /**
+         * Constructor that initialises the ViewHolder and binds the view
+         * to the current instance.
+         * @param itemView
+         */
         public ViewHolder(View itemView) {
             super(itemView);
             groupName =  itemView.findViewById(R.id.group_name);

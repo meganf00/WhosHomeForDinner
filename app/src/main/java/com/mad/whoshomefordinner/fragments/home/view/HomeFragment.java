@@ -31,6 +31,12 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Home Fragment is the corresponding java class for the fragment view,
+ * which sets up the UI of the fragment, and communciates with the
+ * presenter of this class. It shows a small summary of the each
+ * group the user is a member of, and allows them to change their home response
+ * for dinner from this page.
  */
 public class HomeFragment extends Fragment implements BaseView, HomeFragmentView {
 
@@ -150,6 +156,9 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
         generateAllocatedCooks();
     }
 
+    /**
+     * Calls presenter to generate the allocated cooks for the week
+     */
     private void generateAllocatedCooks() {
         mHomeFragmentPresenter.setUpAllocatedCooks();
     }
@@ -222,6 +231,11 @@ public class HomeFragment extends Fragment implements BaseView, HomeFragmentView
     }
 
 
+    /**
+     * Calls methods in presenter to update the current home status
+     * @param view
+     * @param position
+     */
     public void updateHomeStatus(View view, int position) {
         mHomeFragmentPresenter.handleRowClick(position);
 

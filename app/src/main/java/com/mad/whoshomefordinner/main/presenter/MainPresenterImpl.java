@@ -10,6 +10,10 @@ import com.mad.whoshomefordinner.model.User;
 
 /**
  * Created by Megan on 20/5/18.
+ *
+ * MainPresenterImplis a class, which implements the  MainPresenter
+ * and is used as a communication means between the MainVIew and
+ * the MainFirebaseInteractor.
  */
 
 public class MainPresenterImpl implements MainPresenter {
@@ -21,6 +25,14 @@ public class MainPresenterImpl implements MainPresenter {
     private FirebaseInteractorImpl mFirebaseInteractor;
     private DatabaseReference mWHFDRef;
 
+
+    /**
+     * Constructor to create an instance of the MainPresenterImpl
+     * for communication between the view and the model.
+     * @param auth
+     * @param context
+     * @param WHFDRef
+     */
     public MainPresenterImpl(FirebaseAuth auth, Activity context, DatabaseReference WHFDRef) {
         mAuth = auth;
         mContext = context;
@@ -28,14 +40,17 @@ public class MainPresenterImpl implements MainPresenter {
 
     }
 
+    @Override
     public void setUpInteractor(){
         mFirebaseInteractor = new FirebaseInteractorImpl(mAuth, mContext, mWHFDRef);
     }
 
+    @Override
     public MainPresenterImpl getPresenter() {
         return this;
     }
 
+    @Override
     public void connectWithInteractor(){
         mFirebaseInteractor.getPresenter(this);
     }
@@ -56,10 +71,6 @@ public class MainPresenterImpl implements MainPresenter {
 
         }
 
-    }
-
-    public void userCreatedYay() {
-        mMainView.setUpFragment();
     }
 
     @Override

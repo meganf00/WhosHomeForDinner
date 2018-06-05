@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * Created by Megan on 23/5/18.
+ *
+ * Class Group is used to create group objects based on parsed in data
+ *
  */
 
 public class Group {

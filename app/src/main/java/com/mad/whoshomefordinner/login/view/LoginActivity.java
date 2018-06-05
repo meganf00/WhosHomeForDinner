@@ -26,6 +26,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
+/**
+ * LoginActivity corresonds to the LoginActivty layout to display the view and inflate
+ * the widgets.
+ */
+
 public class LoginActivity extends BaseActivity implements LoginView {
 
     private FirebaseAuth mAuth;
@@ -65,6 +70,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
+    /**
+     * onClick method for when the user clicks the button to sign in to call sign in methods
+     */
     @OnClick(R.id.email_sign_in_btn) void loginBtnClick() {
         attemptLogin();
         showProgressBar();
@@ -76,10 +84,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
 
-
-
+    /**
+     * Check's if email is in the correct format
+     *
+     * @param email
+     * @return boolean
+     */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
@@ -87,11 +98,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     public Context getContext() {
         return this;
-    }
-
-    @Override
-    public void showValidationError(String message) {
-
     }
 
     @Override
@@ -114,6 +120,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
+    /**
+     * Displays progress bar and hides all other widgets
+     */
     public void showProgressBar(){
         mProgressBar.setVisibility(View.VISIBLE);
         mLoginForm.setVisibility(View.GONE);
@@ -128,6 +137,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
         mLoginPresenter.detachView();
     }
 
+    /**
+     * Checks if the email and password is valid
+     */
     private void attemptLogin() {
 
         // Store values at the time of the login attempt.

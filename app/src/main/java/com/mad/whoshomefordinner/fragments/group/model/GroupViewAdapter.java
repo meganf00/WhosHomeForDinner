@@ -16,12 +16,21 @@ import java.util.List;
 
 /**
  * Created by Megan on 30/5/18.
+ *
+ * Adapter for RecyclerView implemented in view to create and bind views which related
+ * to each data set
  */
 
 public class GroupViewAdapter extends RecyclerView.Adapter<GroupViewAdapter.ViewHolder>  {
 
     private Context mContext;
     private List<Group> mGroupsList;
+
+    /**
+     * Constructor used to create and initialise the adapter
+     * @param context
+     * @param groups
+     */
 
     public GroupViewAdapter (Context context, List<Group> groups) {
         mContext = context;

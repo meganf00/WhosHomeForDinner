@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by Megan on 20/5/18.
+ *
+ * BaseActivity is the base java class implemented by
+ * each activity in this application, used to share common methods
+ * between activity classes
  */
 
 public class BaseActivity extends AppCompatActivity {

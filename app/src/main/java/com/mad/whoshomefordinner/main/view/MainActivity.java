@@ -34,6 +34,14 @@ import com.mad.whoshomefordinner.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Created 05/05/18
+ *
+ * MainActivity corresponds to the Main layout and is the starting activity. It
+ * sets up the UI for the activity and communicates with the presenter. It is the main
+ * view for the side navigation drawer menu and displays fragments.
+ */
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
@@ -149,6 +157,11 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
+    /**
+     * Displays the selected fragment, selected from navigation drawer
+     * @param fragment
+     * @param user
+     */
     private void displaySelectedFragment(Fragment fragment, User user) {
         Bundle bundle = new Bundle();
 

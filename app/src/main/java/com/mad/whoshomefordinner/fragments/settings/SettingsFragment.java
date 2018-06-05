@@ -11,13 +11,11 @@ import com.mad.whoshomefordinner.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Java class that corresponds to the fragment layout SettingsFragment and
+ * generates the fragment
  */
 public class SettingsFragment extends Fragment {
-
-
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
