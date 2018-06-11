@@ -2,33 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:padding="5dp">
 
     <LinearLayout
         android:id="@+id/home_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical"
-        android:background="@drawable/border">
+        android:background="@drawable/border"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/group_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/group_name"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:gravity="center"
-            android:textColor="@color/colorAccent"
-            />
+            android:textColor="@color/colorPrimaryText" />
 
         <ProgressBar
             android:id="@+id/home_status_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/body"
@@ -41,26 +40,31 @@
                 android:id="@+id/cooking_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="3dp"
                 android:text="@string/you_are_are_not_cooking_tonight"
-                android:textAppearance="@android:style/TextAppearance.Material.Small" />
+                android:textAppearance="@android:style/TextAppearance.Material.Small"
+                android:textColor="@color/colorSecondaryText" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="3dp">
 
                 <TextView
                     android:id="@+id/who_cooking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/name_is_cooking" />
+                    android:text="@string/name_is_cooking"
+                    android:textColor="@color/colorSecondaryText" />
 
 
                 <TextView
                     android:id="@+id/meal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Meal" />
+                    android:text="Meal"
+                    android:textColor="@color/colorSecondaryText" />
 
             </LinearLayout>
 
@@ -68,31 +72,40 @@
                 android:id="@+id/deadline_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/let_them_know_by_time" />
+                android:padding="5dp"
+                android:text="@string/let_them_know_by_time"
+                android:textColor="@color/colorSecondaryText" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="3dp">
 
                 <TextView
                     android:id="@+id/home_question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/are_you_home_or_how_many_have_rsvp_d" />
+                    android:text="@string/are_you_home_or_how_many_have_rsvp_d"
+                    android:textColor="@color/colorSecondaryText" />
 
                 <TextView
                     android:id="@+id/no_people_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
                     android:text="3"
+                    android:textColor="@color/colorSecondaryText"
                     android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/home_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/home_status" />
+                    android:paddingLeft="15dp"
+                    android:text="@string/home_status"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorSecondaryText" />
 
             </LinearLayout>
         </LinearLayout>

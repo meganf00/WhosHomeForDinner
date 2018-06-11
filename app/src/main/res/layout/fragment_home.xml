@@ -20,11 +20,11 @@
             android:id="@+id/welcome_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hey_name_here_s_the_rundown"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
-            android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
+            android:text="@string/hey_name_here_s_the_rundown"
+            android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
         <LinearLayout
             android:layout_width="match_parent"
