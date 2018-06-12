@@ -1,5 +1,6 @@
 package com.mad.whoshomefordinner.fragments.home.model.firebase;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.util.Log;
 
@@ -304,7 +305,7 @@ public class HomeFragmentFirebaseInteractorImpl implements HomeFragmentFirebaseI
     public boolean nowIsBeforeDeadline(int position) throws ParseException {
 
         Date currentTimeCalendar = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
 
         String currentTime = format.format(currentTimeCalendar);

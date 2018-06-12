@@ -42,6 +42,7 @@
             android:label="@string/title_activity_view_group_members"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".base.BaseActivity" />
     </application>
 
 </manifest>

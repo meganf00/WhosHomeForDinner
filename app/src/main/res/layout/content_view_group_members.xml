@@ -8,11 +8,22 @@
     tools:context="com.mad.whoshomefordinner.viewgroupmembers.ViewGroupMembersActivity"
     tools:showIn="@layout/activity_view_group_members">
 
+    <TextView
+        android:id="@+id/members_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:text="@string/group_members_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorPrimaryText"/>
+
 
 
     <LinearLayout
         android:id="@+id/lay1"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/members_title"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
@@ -28,7 +39,7 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@mipmap/ic_launcher_round" />
@@ -37,8 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:text="Warren Smith"
+                android:layout_marginStart="30dp"
+                android:text="@string/warren_smith"
                 android:textColor="@color/colorPrimaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -64,7 +75,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@mipmap/ic_launcher_round" />
@@ -73,8 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:text="Olivia Smith"
+                android:layout_marginStart="30dp"
+                android:text="@string/olivia_smith"
                 android:textColor="@color/colorPrimaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -100,7 +111,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@mipmap/ic_launcher_round" />
@@ -109,8 +120,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:text="Julia Smith"
+                android:layout_marginStart="30dp"
+                android:text="@string/julia_smith"
                 android:textColor="@color/colorPrimaryText"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
