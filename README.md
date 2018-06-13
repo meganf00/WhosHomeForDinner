@@ -7,10 +7,16 @@ The goal of this application is to notify the allocated cook for the night if yo
 
 
 To log into the application, please use following users:
+
 Email: megan@mail.com
+
 Password: meganmail
 
-The following user is a member of 2 groups
+This user is a member of 2 groups
+
+
 Email: julia@mail.com
+
 Password: juliamail
-The following user is a member of 1 group
+
+This following user is a member of 1 group
